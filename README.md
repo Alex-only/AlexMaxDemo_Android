@@ -8,25 +8,38 @@
 
 ## 二. 引入Alex Adapter
 
-1. 将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名
+1、将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名
 
-2. 将以下混淆规则添加到项目中的proguard-rules.pro中（如果有修改类名，keep的类名需改为修改后的类名）
+2、将以下混淆规则添加到项目中的proguard-rules.pro中（如果有修改类名，keep的类名需改为修改后的类名）
 
-   ```
-   -keep class com.alex.** { *;}
-   -keepclassmembers public class com.alex.** {
-      public *;
-   }
-   ```
+```
+-keep class com.alex.** { *;}
+-keepclassmembers public class com.alex.** {
+   public *;
+}
+```
 
-   
 
-### 三. 配置自定义广告平台
 
-在TopOn后台的广告平台页面，点击添加自定义广告平台，并将复制到项目中的各个Adapter的类名配置进页面中。
+### 三. 后台配置
 
-比如：将激励视频的Adapter（com.alex.AlexMaxRewardedVideoAdapter）配置到下方激励视频对应的文本框中（如果有修改类名，需配置修改后的类名）。
+1、按照SDK对接文档接入同时，需要在后台添加自定义广告平台
 
-**注意：**配置的Adapter必须是包名加类名的形式
+![img](img/image1.png)
 
-![](img/custom_adapter.jpg)
+2、选择【自定义广告平台】，填写广告平台名称、账号名称，按照SDK的对接文档填写Adapter
+
+![img](img/image2.png)
+
+3、记录广告平台ID
+
+![img](img/image3.png)
+
+4、广告平台添加完成后，需要等待15min左右，再添加广告源（添加广告源时按照对应样式配置即可）
+
+5、可编辑广告平台设置，选择是否开通报表api并拉取数据
+
+
+
+
+
