@@ -8,11 +8,19 @@
 
 ## 二. 引入Alex Adapter
 
-1、将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名
+1、在build.gradle中添加以下代码，引入平台SDK
 
-2、将以下混淆规则添加到项目中的proguard-rules.pro中（如果有修改类名，keep的类名需改为修改后的类名）
-
+```java
+dependencies {
+    api 'com.applovin:applovin-sdk:11.6.0'
+}
 ```
+
+2、将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名
+
+3、在项目的proguard-rules.pro中添加以下混淆规则（如果有修改类名，keep的类名需改为修改后的类名）
+
+```java
 -keep class com.alex.** { *;}
 -keepclassmembers public class com.alex.** {
    public *;
