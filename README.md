@@ -1,5 +1,7 @@
 # 集成
 
+Tip: If necessary, please refer to [the English documentation](https://github.com/Alex-only/AlexMaxDemo_Android/blob/main/README_EN.md)
+
 ## 一. 接入TopOn SDK
 
 请参考[TopOn SDK集成文档](https://docs.toponad.com/#/zh-cn/android/android_doc/android_sdk_config_access)接入TopOn SDK，建议接入**TopOn v6.1.65及以上版本**
