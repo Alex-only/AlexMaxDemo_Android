@@ -69,5 +69,27 @@ dependencies {
 
 
 
+### 四. Max接入其他广告平台
 
+如果不需要通过Max接入其他广告平台，可跳过此部分内容。以接入Mintegral为例：
+
+1、先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Mintegral版本是多少？（TopOn v6.1.65版本兼容的Mintegral版本为v16.3.61）
+
+2、然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.6.0）和Mintegral版本（v16.3.61），查找对应的Adapter版本（即v16.3.61.0）
+
+**注意：**
+
+（1）如果找不到Mintegral v16.3.61版本对应的Adapter，可通过查看Adapter的Changelog，找到对应的Adapter版本
+
+（2）需确保TopOn和Max都兼容Mintegral SDK
+
+![img](img/image4.png)
+
+3、引入Gradle依赖：
+
+```
+dependencies {
+    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
+}
+```
 
