@@ -90,10 +90,10 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         mMaxAppOpenAd.loadAd();
     }
 
-    private void registerListener(boolean isBidding) {
+    private void registerListener(final boolean isBidding) {
         mMaxAppOpenAd.setListener(new MaxAdListener() {
             @Override
-            public void onAdLoaded(MaxAd maxAd) {
+            public void onAdLoaded(final MaxAd maxAd) {
                 if (!isBidding) {
                     if (mLoadListener != null) {
                         mLoadListener.onAdCacheLoaded();

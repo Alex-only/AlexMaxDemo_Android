@@ -37,7 +37,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     private int mMediaHeight = 0;
 
     @Override
-    public void loadCustomNetworkAd(Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra) {
+    public void loadCustomNetworkAd(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra) {
         initRequestParams(serverExtra, localExtra);
         //Bidding Request
         if (!TextUtils.isEmpty(mPayload)) {
@@ -84,7 +84,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
 
         AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, new AlexMaxNativeAd.LoadCallbackListener() {
             @Override
-            public void onSuccess(CustomNativeAd customNativeAd, MaxAd maxAd) {
+            public void onSuccess(final CustomNativeAd customNativeAd, final MaxAd maxAd) {
                 if (isBidding) {
                     runOnNetworkRequestThread(new Runnable() {
                         @Override
@@ -113,7 +113,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     }
 
     @Override
-    public boolean startBiddingRequest(Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
+    public boolean startBiddingRequest(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
         initRequestParams(serverExtra, localExtra);
         this.mBiddingListener = biddingListener;
 
