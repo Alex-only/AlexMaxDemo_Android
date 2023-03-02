@@ -16,9 +16,21 @@ dependencies {
 }
 ```
 
-2、Copy the code in the AlexLib/src/main/java directory to src/main/java under the project module, and modify the package name or class name of each Adapter as needed
+2、You can choose one of the following methods:
 
-3、Add the following obfuscation rules to the proguard-rules.pro of the project (if the class name is modified, the class name of keep needs to be changed to the modified class name)
+(1) **aar**: Put alex_adapter_max.aar in the libs folder of the project module (if libs does not exist, you need to create it), and then import it in build.gradle
+
+```java
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+}
+```
+
+(2) **code**: 
+
+*Copy the code in the AlexLib/src/main/java directory to src/main/java under the project module, and modify the package name or class name of each Adapter as needed
+
+*Add the following obfuscation rules to the proguard-rules.pro of the project (if the class name is modified, the class name of keep needs to be changed to the modified class name)
 
 ```java
 -keep class com.alex.** { *;}
@@ -27,7 +39,7 @@ dependencies {
 }
 ```
 
-4、The Key used in the Adapter is described as follows:
+3、The Key used in the Adapter is described as follows:
 
 ```
 "sdk_key": SDK Key of advertising platform
@@ -58,6 +70,18 @@ The JSON configuration example when adding an ad source in the background is as 
 *The name of the advertising platform needs to be written with Max, which is convenient for distinguishing the advertising platform. The suggested name format: Max_XXXXX
 
 ![img](img/image2_en.png)
+
+**Note**: If you use the aar method or directly use the source code method (without modifying the class name), please configure the following class name. If the class name is modified, please configure the modified class name
+
+```
+com.alex.AlexMaxRewardedVideoAdapter
+com.alex.AlexMaxInterstitialAdapter
+com.alex.AlexMaxBannerAdapter
+com.alex.AlexMaxNativeAdapter
+com.alex.AlexMaxSplashAdapter
+```
+
+![img](img/image5_en.png)
 
 3、Record Network Firm ID
 
