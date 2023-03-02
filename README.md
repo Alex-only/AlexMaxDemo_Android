@@ -18,9 +18,21 @@ dependencies {
 }
 ```
 
-2、将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名
+2、以下方式任选其一即可：
 
-3、在项目的proguard-rules.pro中添加以下混淆规则（如果有修改类名，keep的类名需改为修改后的类名）
+（1）**aar**：将alex_adapter_max.aar放到项目module的libs文件夹下（如果没有libs文件夹，则需要创建），然后在build.gradle中进行引入
+
+```java
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+}
+```
+
+（2）**源码**：
+
+*将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名。
+
+*在项目的proguard-rules.pro中添加以下混淆规则（如果有修改类名，keep的类名需改为修改后的类名）
 
 ```java
 -keep class com.alex.** { *;}
@@ -29,7 +41,7 @@ dependencies {
 }
 ```
 
-4、Adapter中使用的Key说明如下：
+3、Adapter中使用的Key说明如下：
 
 ```
 "sdk_key": 广告平台的SDK Key
@@ -60,6 +72,18 @@ dependencies {
 *广告平台名称需要写上Max，便于区分广告平台，建议名称格式：Max_XXXXX
 
 ![img](img/image2.png)
+
+**注意**：如果是使用aar方式或者直接使用源码方式（没有修改类名），请配置以下类名。如果修改了类名，请配置修改后的类名
+
+```
+激励视频：com.alex.AlexMaxRewardedVideoAdapter
+插屏：com.alex.AlexMaxInterstitialAdapter
+横幅：com.alex.AlexMaxBannerAdapter
+原生：com.alex.AlexMaxNativeAdapter
+开屏：com.alex.AlexMaxSplashAdapter
+```
+
+![img](img/image5.png)
 
 3、记录广告平台ID
 
