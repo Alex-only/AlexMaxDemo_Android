@@ -6,9 +6,11 @@ Please refer to [TopOn SDK Integration Documentation](https://docs.toponad.com/#
 
 
 
-## Step 2. Introducing Alex Adapter
+## Step 2. Introducing Max SDK&Alex Adapter
 
-1、Add the following code in build.gradle to import the platform SDK
+### 1. Android
+
+1.1 Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
@@ -16,7 +18,7 @@ dependencies {
 }
 ```
 
-2、You can choose one of the following methods:
+1.2 You can choose one of the following methods:
 
 (1) **aar**: Put alex_adapter_max.aar in the libs folder of the project module (if libs does not exist, you need to create it), and then import it in build.gradle
 
@@ -39,7 +41,28 @@ dependencies {
 }
 ```
 
-3、The Key used in the Adapter is described as follows:
+
+
+### 2. Unity
+
+2.1 Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation directory: `Max/Editor/Dependencies.xml`
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+
+        <androidPackage spec="com.applovin:applovin-sdk:11.6.0"/>
+        
+    </androidPackages>
+</dependencies>
+```
+
+2.2 Put alex_adapter_max.aar in the project Assets/AnyThinkAds/Plugins/Android/NonChina/mediation folder
+
+
+
+### 3. The Key used in the Adapter
 
 ```
 "sdk_key": SDK Key of advertising platform
@@ -59,7 +82,33 @@ The JSON configuration example when adding an ad source in the background is as 
 
 
 
-### Step 3. background configuration
+## Step 3. Max integrates with other advertising platforms
+
+If you do not need to access other advertising platforms through Max, you can skip this part. Take access to Mintegral as an example:
+
+1、Go to [TopOn Backstage](https://docs.toponad.com/#/en-us/android/download/package) first, and check which version of Mintegral is compatible with the connected TopOn version? (The Mintegral version compatible with TopOn v6.1.65 is v16.3.61)
+
+2、Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.6.0) and Mintegral version ( v16.3.61), find the corresponding Adapter version (that is, v16.3.61.0)
+
+**Note:**
+
+(1) If you cannot find the Adapter corresponding to Mintegral v16.3.61, you can find the corresponding Adapter version by viewing the Changelog of the Adapter
+
+(2) Make sure both TopOn and Max are compatible with Mintegral SDK
+
+![img](img/image4.png)
+
+3、Introduce Gradle dependencies:
+
+```
+dependencies {
+    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
+}
+```
+
+
+
+## Step 4. TopOn background configuration
 
 1、After connecting according to the SDK docking document, you need to add a custom advertising platform in the background
 
@@ -87,33 +136,58 @@ com.alex.AlexMaxSplashAdapter
 
 ![img](img/image3_en.png)
 
-4、After the advertising platform is added, add the advertising source (you can configure it according to the corresponding style when adding the advertising source)
-
-5、You can edit the advertising platform settings, choose whether to open the report api and pull the data
+After the above configurations are completed, you can add ad sources in TopOn.
 
 
 
-### Step 4. Max integrates with other advertising platforms
+## Step 5. Max setting
 
-If you do not need to access other advertising platforms through Max, you can skip this part. Take access to Mintegral as an example:
+### 1. Create Max account
 
-1、Go to [TopOn Backstage](https://docs.toponad.com/#/en-us/android/download/package) first, and check which version of Mintegral is compatible with the connected TopOn version? (The Mintegral version compatible with TopOn v6.1.65 is v16.3.61)
+Log in to the [MAX](https://dash.applovin.com/o/mediation) official website to apply for an account
 
-2、Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.6.0) and Mintegral version ( v16.3.61), find the corresponding Adapter version (that is, v16.3.61.0)
 
-**Note:**
 
-(1) If you cannot find the Adapter corresponding to Mintegral v16.3.61, you can find the corresponding Adapter version by viewing the Changelog of the Adapter
+### 2. Create MAX app and ad unit
 
-(2) Make sure both TopOn and Max are compatible with Mintegral SDK
+Create app and ad unit in MAX-->Manage-->Ad Units
 
-![img](img/image4.png)
+![](img/max_1.png)
 
-3、Introduce Gradle dependencies:
 
-```
-dependencies {
-    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
-}
-```
 
+### 3. Complete Network information configuration in MAX 
+
+![](img/max_2.png)
+
+
+
+### 4. MAX Advertisement Description
+
+The corresponding relationship between MAX’s Unit and TopOn’s placement type is as follows:
+
+| MAX-Unit     | TopOn-placement |
+| ------------ | --------------- |
+| Banner       | Banner          |
+| Interstitial | Interstitial    |
+| Rewarded     | Rewarded Video  |
+| App Open     | Splash          |
+| Native       | Native          |
+
+
+
+### 5. Configure MAX unit
+
+#### 5.1 Configure the unit of MAX
+
+5.1.1 Obtain the Ad Unit ID of MAX through the following path: MAX-->Manage-->Ad Units
+
+![](img/max_3.png)
+
+
+
+5.1.2. Configure MAX parameters in the TopOn
+
+1) Add an ad source, log in to the TopOn → Mediation → Add ad source
+
+![](img/max_4.png)

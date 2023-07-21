@@ -8,17 +8,19 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 
 
-## 二. 引入Alex Adapter
+## 二. 引入Max SDK&Alex Adapter
 
-1、在build.gradle中添加以下代码，引入平台SDK
+### 1. Android
+
+1.1 在build.gradle中添加以下代码，引入平台SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:11.6.0'
+	api 'com.applovin:applovin-sdk:11.6.0'
 }
 ```
 
-2、以下方式任选其一即可：
+1.2 以下方式任选其一即可：
 
 （1）**aar**：将alex_adapter_max.aar放到项目module的libs文件夹下（如果没有libs文件夹，则需要创建），然后在build.gradle中进行引入
 
@@ -41,7 +43,28 @@ dependencies {
 }
 ```
 
-3、Adapter中使用的Key说明如下：
+
+
+### 2. Unity
+
+2.1 在 Assets/AnyThinkAds/Plugins/Android/NonChina/mediation目录下添加文件：`Max/Editor/Dependencies.xml`
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+
+        <androidPackage spec="com.applovin:applovin-sdk:11.6.0"/>
+        
+    </androidPackages>
+</dependencies>
+```
+
+2.2 将alex_adapter_max.aar放到项目Assets/AnyThinkAds/Plugins/Android/NonChina/mediation文件夹下
+
+
+
+### 3. Adapter中使用的Key说明
 
 ```
 "sdk_key": 广告平台的SDK Key
@@ -61,7 +84,33 @@ dependencies {
 
 
 
-### 三. 后台配置
+## 三. Max接入其他广告平台
+
+如果不需要通过Max接入其他广告平台，可跳过此部分内容。以接入Mintegral为例：
+
+1、先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Mintegral版本是多少？（TopOn v6.1.65版本兼容的Mintegral版本为v16.3.61）
+
+2、然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.6.0）和Mintegral版本（v16.3.61），查找对应的Adapter版本（即v16.3.61.0）
+
+**注意：**
+
+（1）如果找不到Mintegral v16.3.61版本对应的Adapter，可通过查看Adapter的Changelog，找到对应的Adapter版本
+
+（2）需确保TopOn和Max都兼容Mintegral SDK
+
+![img](img/image4.png)
+
+3、引入Gradle依赖：
+
+```java
+dependencies {
+    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
+}
+```
+
+
+
+## 四. TopOn后台配置
 
 1、按照SDK对接文档接入同时，需要在后台添加自定义广告平台
 
@@ -89,33 +138,61 @@ dependencies {
 
 ![img](img/image3.png)
 
-4、广告平台添加完成后，再添加广告源（添加广告源时按照对应样式配置即可）
-
-5、可编辑广告平台设置，选择是否开通报表api并拉取数据
+以上配置都完成之后，可以添加广告源配置
 
 
 
-### 四. Max接入其他广告平台
+## 五. Max后台配置
 
-如果不需要通过Max接入其他广告平台，可跳过此部分内容。以接入Mintegral为例：
+### Step1.创建MAX帐号
 
-1、先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Mintegral版本是多少？（TopOn v6.1.65版本兼容的Mintegral版本为v16.3.61）
+登录[MAX官网](https://dash.applovin.com/o/mediation)申请开通账号
 
-2、然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.6.0）和Mintegral版本（v16.3.61），查找对应的Adapter版本（即v16.3.61.0）
 
-**注意：**
 
-（1）如果找不到Mintegral v16.3.61版本对应的Adapter，可通过查看Adapter的Changelog，找到对应的Adapter版本
+### Step2.创建MAX的应用和广告单元
 
-（2）需确保TopOn和Max都兼容Mintegral SDK
+在MAX-->Manage-->Ad Units中创建应用和广告位
 
-![img](img/image4.png)
+![](img/max_1.png)
 
-3、引入Gradle依赖：
 
-```
-dependencies {
-    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
-}
-```
+
+### Step3.在MAX完成Network信息配置
+
+![](img/max_2.png)
+
+
+
+### Step4. MAX广告位说明
+
+MAX的Unit跟TopOn的广告类型对应关系如下：
+
+| MAX-Unit     | TopOn-广告类型              |
+| ------------ | --------------------------- |
+| Banner       | 横幅广告 Banner             |
+| Interstitial | 插屏广告 Interstitial       |
+| Rewarded     | 激励视频广告 Rewarded Video |
+| App Open     | 开屏广告 Splash             |
+| Native       | 原生广告 Native             |
+
+
+
+### Step5. 在后台配置MAX广告位
+
+#### 5.1 配置MAX 的广告源
+
+5.1.1 通过以下路径获取MAX 的Ad Unit ID：MAX-->Manage-->Ad Units
+
+![](img/max_3.png)
+
+
+
+5.1.2. 将MAX的参数配置在TopOn后台
+
+添加广告源，登录TopOn后台→广告平台→变现平台→广告源管理（Max）→添加广告源
+
+![](img/max_4.png)
+
+
 
