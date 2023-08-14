@@ -40,19 +40,21 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     public void loadCustomNetworkAd(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra) {
         initRequestParams(serverExtra, localExtra);
         //Bidding Request
-        if (!TextUtils.isEmpty(mPayload)) {
-            AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
-            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof CustomNativeAd) {
-                if (mLoadListener != null) {
-                    mLoadListener.onAdCacheLoaded((CustomNativeAd) alexMaxBiddingInfo.adObject);
-                }
-            } else {
-                if (mLoadListener != null) {
-                    mLoadListener.onAdLoadError("", "Max: Bidding Cache is Empty or not ready.");
-                }
-            }
-            return;
-        }
+//        if (!TextUtils.isEmpty(mPayload)) {
+//            AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof CustomNativeAd) {
+//                mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(alexMaxBiddingInfo.maxAd);
+//
+//                if (mLoadListener != null) {
+//                    mLoadListener.onAdCacheLoaded((CustomNativeAd) alexMaxBiddingInfo.adObject);
+//                }
+//            } else {
+//                if (mLoadListener != null) {
+//                    mLoadListener.onAdLoadError("", "Max: Bidding Cache is Empty or not ready.");
+//                }
+//            }
+//            return;
+//        }
 
         if (TextUtils.isEmpty(mSdkKey) || TextUtils.isEmpty(mAdUnitId)) {
             if (mLoadListener != null) {
@@ -84,14 +86,15 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
 
         AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, new AlexMaxNativeAd.LoadCallbackListener() {
             @Override
-            public void onSuccess(final CustomNativeAd customNativeAd, final MaxAd maxAd) {
+            public void onSuccess(final CustomNativeAd customNativeAd, final MaxAd maxAd, Map<String, Object> networkInfoMap) {
+                mExtraMap = networkInfoMap;
                 if (isBidding) {
                     runOnNetworkRequestThread(new Runnable() {
                         @Override
                         public void run() {
                             if (mBiddingListener != null) {
-                                String cacheId = AlexMaxInitManager.getInstance().saveC2SOffer(mAdUnitId, customNativeAd, maxAd);
-                                mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
+                                String token = AlexMaxInitManager.getInstance().getToken();
+                                mBiddingListener.onC2SBiddingResultWithCache(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), token, null), customNativeAd);
                                 mBiddingListener = null;
                             }
                         }
@@ -120,7 +123,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                if (checkBiddingCache()) return;
+//                if (checkBiddingCache()) return;
                 startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
             }
 
@@ -136,24 +139,24 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         return true;
     }
 
-    private boolean checkBiddingCache() {
-        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
-        if (cacheEntry != null) {
-            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
-            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof CustomNativeAd) {
-                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
-                String cacheId = cacheEntry.getKey();
-                if (mBiddingListener != null) {
-                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
-                    mBiddingListener = null;
-                }
-                return true;
-            }
-
-        }
-
-        return false;
-    }
+//    private boolean checkBiddingCache() {
+//        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
+//        if (cacheEntry != null) {
+//            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof CustomNativeAd) {
+//                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
+//                String cacheId = cacheEntry.getKey();
+//                if (mBiddingListener != null) {
+//                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
+//                    mBiddingListener = null;
+//                }
+//                return true;
+//            }
+//
+//        }
+//
+//        return false;
+//    }
 
     private void initRequestParams(Map<String, Object> serverExtra, Map<String, Object> localExtra) {
         mSdkKey = "";

@@ -319,6 +319,10 @@ public class AlexMaxInitManager extends ATInitMediation {
         return null;
     }
 
+    protected String getToken() {
+        return UUID.randomUUID().toString();
+    }
+
     protected Map<String, Object> handleMaxAd(MaxAd maxAd) {
         if (maxAd == null) {
             return null;

@@ -16,7 +16,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ```java
 dependencies {
-	api 'com.applovin:applovin-sdk:11.6.0'
+	api 'com.applovin:applovin-sdk:11.9.0'
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:11.6.0"/>
+        <androidPackage spec="com.applovin:applovin-sdk:11.9.0"/>
         
     </androidPackages>
 </dependencies>

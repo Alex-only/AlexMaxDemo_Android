@@ -13,6 +13,8 @@ import com.applovin.mediation.nativeAds.MaxNativeAdListener;
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
 import com.applovin.mediation.nativeAds.MaxNativeAdView;
 
+import java.util.Map;
+
 public class AlexMaxNativeAd extends CustomNativeAd {
 
     MaxNativeAdLoader mMaxNativeAdLoader;
@@ -34,9 +36,11 @@ public class AlexMaxNativeAd extends CustomNativeAd {
             public void onNativeAdLoaded(@Nullable MaxNativeAdView maxNativeAdView, MaxAd maxAd) {
                 mMediaView = maxNativeAdView;
                 mMaxAd = maxAd;
+                Map<String, Object> networkInfoMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
+                setNetworkInfoMap(networkInfoMap);
 
                 if (mLoadCallbackListener != null) {
-                    mLoadCallbackListener.onSuccess(AlexMaxNativeAd.this, maxAd);
+                    mLoadCallbackListener.onSuccess(AlexMaxNativeAd.this, maxAd, networkInfoMap);
                 }
             }
 
@@ -92,7 +96,7 @@ public class AlexMaxNativeAd extends CustomNativeAd {
     }
 
     protected interface LoadCallbackListener {
-        void onSuccess(CustomNativeAd customNativeAd, MaxAd maxAd);
+        void onSuccess(CustomNativeAd customNativeAd, MaxAd maxAd, Map<String, Object> networkInfoMap);
 
         void onFail(String errorCode, String errorMsg);
     }

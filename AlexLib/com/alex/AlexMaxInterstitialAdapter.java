@@ -46,21 +46,21 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         initRequestParams(serverExtra);
 
         //Bidding Request
-        if (!TextUtils.isEmpty(mPayload)) {
-            AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
-            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
-                mMaxInterstitialAd = (MaxInterstitialAd) alexMaxBiddingInfo.adObject;
-                registerListener(false);
-                if (mLoadListener != null) {
-                    mLoadListener.onAdCacheLoaded();
-                }
-            } else {
-                if (mLoadListener != null) {
-                    mLoadListener.onAdLoadError("", "Max: Bidding Cache is Empty or not ready.");
-                }
-            }
-            return;
-        }
+//        if (!TextUtils.isEmpty(mPayload)) {
+//            AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
+//                mMaxInterstitialAd = (MaxInterstitialAd) alexMaxBiddingInfo.adObject;
+//                registerListener(false);
+//                if (mLoadListener != null) {
+//                    mLoadListener.onAdCacheLoaded();
+//                }
+//            } else {
+//                if (mLoadListener != null) {
+//                    mLoadListener.onAdLoadError("", "Max: Bidding Cache is Empty or not ready.");
+//                }
+//            }
+//            return;
+//        }
 
         if (TextUtils.isEmpty(mSdkKey) || TextUtils.isEmpty(mAdUnitId)) {
             if (mLoadListener != null) {
@@ -133,8 +133,8 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
                         @Override
                         public void run() {
                             if (mBiddingListener != null) {
-                                String cacheId = AlexMaxInitManager.getInstance().saveC2SOffer(mAdUnitId, mMaxInterstitialAd, maxAd);
-                                mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
+                                String token = AlexMaxInitManager.getInstance().getToken();
+                                mBiddingListener.onC2SBiddingResultWithCache(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), token, null), null);
                                 mBiddingListener = null;
                             }
                         }
@@ -239,7 +239,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                if (checkBiddingCache()) return;
+//                if (checkBiddingCache()) return;
                 startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
             }
 
@@ -255,24 +255,24 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         return true;
     }
 
-    private boolean checkBiddingCache() {
-        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
-        if (cacheEntry != null) {
-            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
-            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
-                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
-                String cacheId = cacheEntry.getKey();
-                if (mBiddingListener != null) {
-                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
-                    mBiddingListener = null;
-                }
-                return true;
-            }
-
-        }
-
-        return false;
-    }
+//    private boolean checkBiddingCache() {
+//        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
+//        if (cacheEntry != null) {
+//            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
+//                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
+//                String cacheId = cacheEntry.getKey();
+//                if (mBiddingListener != null) {
+//                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
+//                    mBiddingListener = null;
+//                }
+//                return true;
+//            }
+//
+//        }
+//
+//        return false;
+//    }
 
     @Override
     public Map<String, Object> getNetworkInfoMap() {
