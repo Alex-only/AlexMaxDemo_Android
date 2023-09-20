@@ -1,3 +1,19 @@
+**v1.1.3版本更新说明:**
+
+1.支持Max的自渲染广告接入，目前能适配Applovin，Admob的接入
+
+2.自渲染广告必须将相关的View设置进入ATNativePrepareInfo里面，以下是必须设置的：
+
+| API                                  | 说明              |
+| ------------------------------------ | ----------------- |
+| setTitleView(View titleView)         | 绑定标题View      |
+| setIconView(View iconView)           | 绑定应用图标 View |
+| setMainImageView(View mainImageView) | 绑定大图View      |
+| setDescView(View descView)           | 绑定描述View      |
+| setCtaView(View ctaView)             | 绑定CTA按钮View   |
+
+
+
 # 集成
 
 Tip: If necessary, please refer to [the English documentation](https://github.com/Alex-only/AlexMaxDemo_Android/blob/main/README_EN.md)
@@ -10,19 +26,41 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ## 二. 引入Max SDK&Alex Adapter
 
-### 1. Android
+### Android
 
-1.1 在build.gradle中添加以下代码，引入平台SDK
+#### 1. 引入Max SDK
+
+在build.gradle中添加以下代码，引入平台SDK
 
 ```java
 dependencies {
+    //Max SDK
 	api 'com.applovin:applovin-sdk:11.9.0'
 }
 ```
 
-1.2 以下方式任选其一即可：
+#### 2. 引入Alex Adapter
 
-（1）**aar**：将alex_adapter_max.aar放到项目module的libs文件夹下（如果没有libs文件夹，则需要创建），然后在build.gradle中进行引入
+**注意**：以下方式任选其一即可
+
+2.1 Gradle引入(推荐)：
+
+在build.gradle中添加以下代码：
+
+```java
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Alex Adapter
+    api 'io.github.alex-only:max_adapter:1.1.3'
+}
+```
+
+2.2 aar：
+
+将alex_adapter_max.aar放到项目module的libs文件夹下（如果没有libs文件夹，则需要创建），然后在build.gradle中进行引入
 
 ```java
 dependencies {
@@ -30,7 +68,7 @@ dependencies {
 }
 ```
 
-（2）**源码**：
+2.3 源码：
 
 *将AlexLib/src/main/java目录下的代码复制拷贝到项目module下的src/main/java中，可根据需要修改各个Adapter的包名或者类名。
 
@@ -45,22 +83,21 @@ dependencies {
 
 
 
-### 2. Unity
+### Unity
 
-2.1 在 Assets/AnyThinkAds/Plugins/Android/NonChina/mediation目录下添加文件：`Max/Editor/Dependencies.xml`
+在 Assets/AnyThinkAds/Plugins/Android/NonChina/mediation目录下添加文件：`Max/Editor/Dependencies.xml`
 
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:11.9.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
         
     </androidPackages>
 </dependencies>
 ```
-
-2.2 将alex_adapter_max.aar放到项目Assets/AnyThinkAds/Plugins/Android/NonChina/mediation文件夹下
 
 
 
@@ -74,7 +111,7 @@ dependencies {
 
 后台添加广告源时的JSON配置示例如下：（xxx需要替换为Max实际的SDK key以及广告位ID，非横幅广告位不需要配置"unit_type"）
 
-```
+```json
 {
     "sdk_key":"xxx",
     "unit_id":"xxx",
@@ -122,7 +159,7 @@ dependencies {
 
 ![img](img/image2.png)
 
-**注意**：如果是使用aar方式或者直接使用源码方式（没有修改类名），请配置以下类名。如果修改了类名，请配置修改后的类名
+**注意**：如果是使用gradle、aar方式或者直接使用源码方式（没有修改类名），请配置以下类名。如果修改了类名，请配置修改后的类名
 
 ```
 激励视频：com.alex.AlexMaxRewardedVideoAdapter

@@ -1,3 +1,19 @@
+**Changle Log v1.1.3:**
+
+1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob.
+
+2.Self-rendering ads must enter the relevant View settings into ATNativePrepareInfo. The following must be set:
+
+| API                                  | **Note**                   |
+| ------------------------------------ | -------------------------- |
+| setTitleView(View titleView)         | Bind Title View            |
+| setIconView(View iconView)           | Bind App Icon View         |
+| setMainImageView(View mainImageView) | Bind the main image View   |
+| setDescView(View descView)           | Bind description View      |
+| setCtaView(View ctaView)             | Bind call to action button |
+
+
+
 # Integration instructions
 
 ## Step 1. Integrate TopOn SDK
@@ -8,9 +24,11 @@ Please refer to [TopOn SDK Integration Documentation](https://docs.toponad.com/#
 
 ## Step 2. Introducing Max SDK&Alex Adapter
 
-### 1. Android
+### Android
 
-1.1 Add the following code in build.gradle to import the platform SDK
+#### 1. Import Max SDK
+
+Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
@@ -18,9 +36,28 @@ dependencies {
 }
 ```
 
-1.2 You can choose one of the following methods:
+#### 2. Import Alex Adapter
 
-(1) **aar**: Put alex_adapter_max.aar in the libs folder of the project module (if libs does not exist, you need to create it), and then import it in build.gradle
+**Note:** You can choose one of the following methods:
+
+2.1 Gradle (Recommand):
+
+Add the following code in build.gradle
+
+```java
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //Alex Adapter
+    api 'io.github.alex-only:max_adapter:1.1.3'
+}
+```
+
+2.2 aar：
+
+Put alex_adapter_max.aar in the libs folder of the project module (if libs does not exist, you need to create it), and then import it in build.gradle
 
 ```java
 dependencies {
@@ -28,7 +65,7 @@ dependencies {
 }
 ```
 
-(2) **code**: 
+2.3 code: 
 
 *Copy the code in the AlexLib/src/main/java directory to src/main/java under the project module, and modify the package name or class name of each Adapter as needed
 
@@ -43,22 +80,21 @@ dependencies {
 
 
 
-### 2. Unity
+### Unity
 
-2.1 Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation directory: `Max/Editor/Dependencies.xml`
+Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation directory: `Max/Editor/Dependencies.xml`
 
-```
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <dependencies>
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:11.9.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
         
     </androidPackages>
 </dependencies>
 ```
-
-2.2 Put alex_adapter_max.aar in the project Assets/AnyThinkAds/Plugins/Android/NonChina/mediation folder
 
 
 
@@ -120,7 +156,7 @@ dependencies {
 
 ![img](img/image2_en.png)
 
-**Note**: If you use the aar method or directly use the source code method (without modifying the class name), please configure the following class name. If the class name is modified, please configure the modified class name
+**Note**: If you use the gradle、aar method or directly use the source code method (without modifying the class name), please configure the following class name. If the class name is modified, please configure the modified class name
 
 ```
 com.alex.AlexMaxRewardedVideoAdapter

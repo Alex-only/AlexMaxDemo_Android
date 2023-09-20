@@ -25,6 +25,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     String mSdkKey;
     String mPayload;
 
+    String mUnitType;
     Map<String, Object> mExtraMap;
 
     boolean isDynamicePrice;
@@ -68,7 +69,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             public void onSuccess() {
                 AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
 
-                startLoadAd(context.getApplicationContext(), appLovinSdk, false);
+                startLoadAd(context.getApplicationContext(), appLovinSdk, false, localExtra);
             }
 
             @Override
@@ -78,13 +79,15 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         });
     }
 
-    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding) {
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding, Map<String, Object> localExtras) {
         nativeAdLoader = new MaxNativeAdLoader(mAdUnitId, appLovinSdk, context);
         if (isDynamicePrice) {
             nativeAdLoader.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }
 
-        AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, new AlexMaxNativeAd.LoadCallbackListener() {
+        //TODO Test
+
+        LoadCallbackListener loadCallbackListener = new LoadCallbackListener() {
             @Override
             public void onSuccess(final CustomNativeAd customNativeAd, final MaxAd maxAd, Map<String, Object> networkInfoMap) {
                 mExtraMap = networkInfoMap;
@@ -110,9 +113,16 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             public void onFail(String errorCode, String errorMsg) {
                 notifyATLoadFail(errorCode, errorMsg);
             }
-        }, mMediaWidth, mMediaHeight);
+        };
 
-        alexMaxNativeAd.startLoad();
+        if (TextUtils.equals(mUnitType, "2")) {
+            AlexMaxManualNativeAd alexMaxNativeAd = new AlexMaxManualNativeAd(context, nativeAdLoader, loadCallbackListener);
+            alexMaxNativeAd.startLoad(localExtras);
+        } else {
+            AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, loadCallbackListener, mMediaWidth, mMediaHeight);
+            alexMaxNativeAd.startLoad();
+        }
+
     }
 
     @Override
@@ -124,7 +134,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             @Override
             public void onSuccess() {
 //                if (checkBiddingCache()) return;
-                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true, localExtra);
             }
 
             @Override
@@ -161,6 +171,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     private void initRequestParams(Map<String, Object> serverExtra, Map<String, Object> localExtra) {
         mSdkKey = "";
         mAdUnitId = "";
+        mUnitType = "";
 
         if (serverExtra.containsKey("sdk_key")) {
             mSdkKey = (String) serverExtra.get("sdk_key");
@@ -170,6 +181,9 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         }
         if (serverExtra.containsKey("payload")) {
             mPayload = serverExtra.get("payload").toString();
+        }
+        if (serverExtra.containsKey("unit_type")) {
+            mUnitType = serverExtra.get("unit_type").toString();
         }
 
         double maxPriceValue = AlexMaxConst.getMaxPriceValue(serverExtra);
@@ -210,5 +224,11 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     @Override
     public boolean setUserDataConsent(Context context, boolean isConsent, boolean isEUTraffic) {
         return AlexMaxInitManager.getInstance().setUserDataConsent(context, isConsent, isEUTraffic);
+    }
+
+    protected interface LoadCallbackListener {
+        void onSuccess(CustomNativeAd customNativeAd, MaxAd maxAd, Map<String, Object> networkInfoMap);
+
+        void onFail(String errorCode, String errorMsg);
     }
 }

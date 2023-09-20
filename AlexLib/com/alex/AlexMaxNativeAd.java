@@ -18,7 +18,7 @@ import java.util.Map;
 public class AlexMaxNativeAd extends CustomNativeAd {
 
     MaxNativeAdLoader mMaxNativeAdLoader;
-    LoadCallbackListener mLoadCallbackListener;
+    AlexMaxNativeAdapter.LoadCallbackListener mLoadCallbackListener;
 
     View mMediaView;
     MaxAd mMaxAd;
@@ -26,7 +26,7 @@ public class AlexMaxNativeAd extends CustomNativeAd {
     private int mMediaWidth;
     private int mMediaHeight;
 
-    public AlexMaxNativeAd(MaxNativeAdLoader maxNativeAdLoader, LoadCallbackListener loadCallbackListener, int mediaWidth, int mediaHeight) {
+    public AlexMaxNativeAd(MaxNativeAdLoader maxNativeAdLoader, AlexMaxNativeAdapter.LoadCallbackListener loadCallbackListener, int mediaWidth, int mediaHeight) {
         mMaxNativeAdLoader = maxNativeAdLoader;
         mLoadCallbackListener = loadCallbackListener;
         mMediaWidth = mediaWidth;
@@ -34,14 +34,18 @@ public class AlexMaxNativeAd extends CustomNativeAd {
         mMaxNativeAdLoader.setNativeAdListener(new MaxNativeAdListener() {
             @Override
             public void onNativeAdLoaded(@Nullable MaxNativeAdView maxNativeAdView, MaxAd maxAd) {
+                if (maxNativeAdView == null) {
+                    if (mLoadCallbackListener != null) {
+                        mLoadCallbackListener.onFail("", "Max return MaxNativeAdView is null.");
+                    }
+                    return;
+                }
                 mMediaView = maxNativeAdView;
                 mMaxAd = maxAd;
                 Map<String, Object> networkInfoMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 setNetworkInfoMap(networkInfoMap);
 
-                if (mLoadCallbackListener != null) {
-                    mLoadCallbackListener.onSuccess(AlexMaxNativeAd.this, maxAd, networkInfoMap);
-                }
+
             }
 
             @Override
@@ -95,9 +99,5 @@ public class AlexMaxNativeAd extends CustomNativeAd {
         }
     }
 
-    protected interface LoadCallbackListener {
-        void onSuccess(CustomNativeAd customNativeAd, MaxAd maxAd, Map<String, Object> networkInfoMap);
 
-        void onFail(String errorCode, String errorMsg);
-    }
 }
