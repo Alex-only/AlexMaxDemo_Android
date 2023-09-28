@@ -35,7 +35,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 ```java
 dependencies {
     //Max SDK
-	api 'com.applovin:applovin-sdk:11.9.0'
+	api 'com.applovin:applovin-sdk:11.10.1'
 }
 ```
 
@@ -92,7 +92,7 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:11.9.0"/>
+        <androidPackage spec="com.applovin:applovin-sdk:11.10.1"/>
         <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
         
     </androidPackages>
@@ -123,27 +123,78 @@ dependencies {
 
 ## 三. Max接入其他广告平台
 
-如果不需要通过Max接入其他广告平台，可跳过此部分内容。以接入Mintegral为例：
+<font color='red'>如果不需要通过Max接入其他广告平台，可跳过此部分内容。</font>
 
-1、先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Mintegral版本是多少？（TopOn v6.1.65版本兼容的Mintegral版本为v16.3.61）
 
-2、然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.6.0）和Mintegral版本（v16.3.61），查找对应的Adapter版本（即v16.3.61.0）
+
+### 1. 确定广告平台Adapter版本
+
+以接入Admob为例：
+
+1.1 先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Mintegral版本是多少？（TopOn v6.2.72版本兼容的Admob版本为v22.3.0）
+
+1.2 然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.10.1）和Admob版本（v22.3.0），查找对应的Adapter版本（即v22.3.0.0）
 
 **注意：**
 
-（1）如果找不到Mintegral v16.3.61版本对应的Adapter，可通过查看Adapter的Changelog，找到对应的Adapter版本
+（1）如果找不到Admob v22.3.0版本对应的Adapter，可通过查看Adapter的Changelog，找到对应的Adapter版本
 
 （2）需确保TopOn和Max都兼容Mintegral SDK
 
 ![img](img/image4.png)
 
-3、引入Gradle依赖：
+### 2. 引入广告平台Adapter
 
 ```java
 dependencies {
-    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
+    implementation 'com.applovin.mediation:google-adapter:22.3.0.0'
 }
 ```
+
+### 3. 广告平台的额外配置
+
+进入[Preparing Mediated Networks](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#gradle)页面，然后勾选Admob，根据生成的配置说明，进行额外配置
+
+**注意**：配置在AndroidManifest.xml中的"com.google.android.gms.ads.APPLICATION_ID"，其对应的应用ID，必须与TopOn后台配置的Admob广告源中的应用ID一致
+
+![img](img/network_config.png)
+
+![img](img/network_config_1.png)
+
+![img](img/network_config_2.png)
+
+### 4. 验证集成
+
+4.1 调用以下代码，开启Max的Mediation Debugger工具
+
+**注意：**
+
+- 其中sdkKey为Max后台的SDK Key
+- 测试完毕后，需删除此代码
+
+```java
+public class MainActivity extends Activity
+{
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        AppLovinSdk appLovinSdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(context), context);
+      
+        appLovinSdk.setMediationProvider( "max" );
+        appLovinSdk.initializeSdk( context, new AppLovinSdk.SdkInitializationListener() {
+            @Override
+            public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+            {
+                // AppLovin SDK is initialized, open mediation debugger
+                appLovinSdk.showMediationDebugger();
+            }
+        } );
+    }
+}
+```
+
+4.2 进入[Mediation-Debugger](https://dash.applovin.com/documentation/mediation/android/testing-networks/mediation-debugger)页面，按照以下步骤，验证广告平台集成是否正常
+
+![img](img/max_mediation_debugger.png)
 
 
 
@@ -229,7 +280,7 @@ MAX的Unit跟TopOn的广告类型对应关系如下：
 
 添加广告源，登录TopOn后台→广告平台→变现平台→广告源管理（Max）→添加广告源
 
-![](img/max_4.png)
+
 
 
 

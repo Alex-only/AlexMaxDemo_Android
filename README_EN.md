@@ -32,7 +32,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:11.9.0'
+    api 'com.applovin:applovin-sdk:11.10.1'
 }
 ```
 
@@ -89,7 +89,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:11.9.0"/>
+        <androidPackage spec="com.applovin:applovin-sdk:11.10.1"/>
         <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
         
     </androidPackages>
@@ -120,27 +120,78 @@ The JSON configuration example when adding an ad source in the background is as 
 
 ## Step 3. Max integrates with other advertising platforms
 
-If you do not need to access other advertising platforms through Max, you can skip this part. Take access to Mintegral as an example:
+<font color='red'>If you do not need to access other advertising platforms through Max, you can skip this part.</font>
 
-1、Go to [TopOn Backstage](https://docs.toponad.com/#/en-us/android/download/package) first, and check which version of Mintegral is compatible with the connected TopOn version? (The Mintegral version compatible with TopOn v6.1.65 is v16.3.61)
 
-2、Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.6.0) and Mintegral version ( v16.3.61), find the corresponding Adapter version (that is, v16.3.61.0)
+
+### 1. Determine the advertising platform Adapter version
+
+Take access to Admob as an example:
+
+1.1 Go to [TopOn Backstage](https://docs.toponad.com/#/en-us/android/download/package) first, and check which version of Admob is compatible with the connected TopOn version? (The Admob version compatible with TopOn v6.2.72 is v22.3.0)
+
+1.2 Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.10.1) and Admob version (v22.3.0), find the corresponding Adapter version (that is, v22.3.0.0)
 
 **Note:**
 
-(1) If you cannot find the Adapter corresponding to Mintegral v16.3.61, you can find the corresponding Adapter version by viewing the Changelog of the Adapter
+(1) If you cannot find the Adapter corresponding to Admob v22.3.0, you can find the corresponding Adapter version by viewing the Changelog of the Adapter
 
-(2) Make sure both TopOn and Max are compatible with Mintegral SDK
+(2) Make sure both TopOn and Max are compatible with Admob SDK
 
 ![img](img/image4.png)
 
-3、Introduce Gradle dependencies:
+### 2. Introduce Gradle dependencies
 
 ```
 dependencies {
-    implementation 'com.applovin.mediation:mintegral-adapter:16.3.61.0'
+    implementation 'com.applovin.mediation:google-adapter:22.3.0.0'
 }
 ```
+
+### 3. Additional configuration of the advertising platform
+
+Enter the [Preparing Mediated Networks](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#gradle) page, then check Admob and perform additional configuration according to the generated configuration instructions.
+
+**Note**: The corresponding application ID of "com.google.android.gms.ads.APPLICATION_ID" configured in AndroidManifest.xml must be consistent with the application ID in the Admob advertising source configured in the TopOn background.
+
+![img](img/network_config.png)
+
+![img](img/network_config_1.png)
+
+![img](img/network_config_2.png)
+
+### 4. Verify integration
+
+4.1 Call the following code to open Max’s Mediation Debugger tool
+
+**Note：**
+
+- Among them, sdkKey is the SDK Key of Max background.
+- After testing, you need to delete this code
+
+```java
+public class MainActivity extends Activity
+{
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        AppLovinSdk appLovinSdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(context), context);
+      
+        appLovinSdk.setMediationProvider( "max" );
+        appLovinSdk.initializeSdk( context, new AppLovinSdk.SdkInitializationListener() {
+            @Override
+            public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
+            {
+                // AppLovin SDK is initialized, open mediation debugger
+                appLovinSdk.showMediationDebugger();
+            }
+        } );
+    }
+}
+```
+
+4.2 Enter the [Mediation-Debugger](https://dash.applovin.com/documentation/mediation/android/testing-networks/mediation-debugger) page and follow the steps below to verify whether the advertising platform integration is normal.
+
+![img](img/max_mediation_debugger.png)
 
 
 
@@ -226,4 +277,3 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 
 1) Add an ad source, log in to the TopOn → Mediation → Add ad source
 
-![](img/max_4.png)
