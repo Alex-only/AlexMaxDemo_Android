@@ -277,3 +277,42 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 
 1) Add an ad source, log in to the TopOn → Mediation → Add ad source
 
+
+
+## Step 6. Test Max ads
+
+<font color='red'>Please make sure you have followed the instructions above to create applications and advertising placement in the Max backend and configure them under the advertising placement in the TopOn backend.</font>
+
+
+
+### 1. Open the log of TopOn SDK
+
+```java
+ATSDK.setNetworkLogDebug(true);//The SDK log function is recommended to be turned on during the integration testing phase and must be turned off before going online.
+```
+
+> After opening, you can filter this TAG in Logcat to view related logs: `anythink|AppLovinSdk`
+
+(1) The device ID (GAID) can be obtained through the following logs
+
+```java
+anythink: ********************************** UA_6.2.72 *************************************
+anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
+anythink: ********************************** UA_6.2.72 *************************************
+```
+
+
+
+### 2. Open Max's test mode
+
+Enter the [MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes) page, click the `Add Test Device` button, and fill in the GAID obtained above in the input box of IDFA (iOS) or GAID (Android), then select the advertising platform that needs to be tested, and click `Save` to save it.
+
+![](img/max_test_mode.png)
+
+> For more information, please refer to [MAX Test Mode](https://dash.applovin.com/documentation/mediation/android/testing-networks/test-mode)
+
+
+
+### 3. Load & display ads
+
+After adding the test device to the Max backend, please wait for 5 to 10 minutes. After the configuration takes effect, call the relevant methods of the TopOn SDK to load and display the TopOn placement to verify whether the integration of the Max advertising is normal.

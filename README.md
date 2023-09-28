@@ -282,5 +282,41 @@ MAX的Unit跟TopOn的广告类型对应关系如下：
 
 
 
+## 六、测试Max广告
 
+<font color='red'>请确保已经按照上方说明，已经在Max后台创建好应用和广告位，并将其配置到TopOn后台的广告位下</font>
+
+
+
+### 1. 打开TopOn SDK的日志
+
+```java
+ATSDK.setNetworkLogDebug(true);//SDK日志功能，集成测试阶段建议开启，上线前必须关闭
+```
+
+> 打开后，可在Logcat中过滤此TAG查看相关日志：`anythink|AppLovinSdk`
+
+（1）可通过以下日志获取设备ID(GAID)
+
+```java
+anythink: ********************************** UA_6.2.72 *************************************
+anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
+anythink: ********************************** UA_6.2.72 *************************************
+```
+
+
+
+### 2. 打开Max的测试模式
+
+进入[MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes)页面，点击`Add Test Device`按钮，在IDFA (iOS) or GAID (Android)的输入框中填入上面获取到的GAID，然后选择需要进行测试的广告平台，点击`Save`进行保存。
+
+![](img/max_test_mode.png)
+
+> 更多信息，请参考 [MAX Test Mode](https://dash.applovin.com/documentation/mediation/android/testing-networks/test-mode)
+
+
+
+### 3. 加载&展示广告
+
+在Max后台添加测试设备后，请等待5~10分钟，待配置生效后，调用TopOn SDK的相关方法进行TopOn广告位的加载&展示，验证Max广告的集成是否正常
 
