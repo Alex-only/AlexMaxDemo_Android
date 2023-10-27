@@ -98,26 +98,6 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 
 
 
-### 3. The Key used in the Adapter
-
-```
-"sdk_key": SDK Key of advertising platform
-"unit_id": Advertising slot ID of the advertising platform
-"unit_type": Ad slot type, 0: Banner, 1: MREC
-```
-
-The JSON configuration example when adding an ad source in the background is as follows: (xxx needs to be replaced with the actual SDK key and ad slot ID of Max, and "unit_type" does not need to be configured for non-banner ad slots)
-
-```
-{
-    "sdk_key":"xxx",
-    "unit_id":"xxx",
-    "unit_type":"0"
-}
-```
-
-
-
 ## Step 3. Max integrates with other advertising platforms
 
 <font color='red'>If you do not need to access other advertising platforms through Max, you can skip this part.</font>
@@ -224,6 +204,26 @@ com.alex.AlexMaxSplashAdapter
 ![img](img/image3_en.png)
 
 After the above configurations are completed, you can add ad sources in TopOn.
+
+<br>
+
+#### The Key used in the Adapter
+
+```
+"sdk_key": SDK Key of advertising platform
+"unit_id": Advertising slot ID of the advertising platform
+"unit_type": Ad slot type, 0: Banner, 1: MREC
+```
+
+The JSON configuration example when adding an ad source in the background is as follows: (xxx needs to be replaced with the actual SDK key and ad slot ID of Max, and "unit_type" does not need to be configured for non-banner ad slots)
+
+```
+{
+    "sdk_key":"xxx",
+    "unit_id":"xxx",
+    "unit_type":"0"
+}
+```
 
 
 
