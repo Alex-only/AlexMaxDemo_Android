@@ -1,6 +1,6 @@
 **v1.1.3版本更新说明:**
 
-1.支持Max的自渲染广告接入，目前能适配Applovin，Admob的接入
+1.支持Max的自渲染广告接入，目前能适配Applovin，Admob（com.applovin.mediation:google-adapter版本必须是v22.1.0.1以上）的接入
 
 2.自渲染广告必须将相关的View设置进入ATNativePrepareInfo里面，以下是必须设置的：
 

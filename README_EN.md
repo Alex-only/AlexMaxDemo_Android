@@ -1,6 +1,6 @@
 **Changle Log v1.1.3:**
 
-1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob.
+1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
 
 2.Self-rendering ads must enter the relevant View settings into ATNativePrepareInfo. The following must be set:
 
