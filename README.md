@@ -20,7 +20,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ## 一. 接入TopOn SDK
 
-请参考[TopOn SDK集成文档](https://docs.toponad.com/#/zh-cn/android/android_doc/android_sdk_config_access)接入TopOn SDK，建议接入**TopOn v6.1.65及以上版本**
+请参考[TopOn SDK集成文档](https://docs.toponad.com/#/zh-cn/android/android_doc/android_sdk_config_access)接入TopOn SDK，建议接入**TopOn v6.2.93及以上版本**
 
 
 
@@ -35,7 +35,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 ```java
 dependencies {
     //Max SDK
-	api 'com.applovin:applovin-sdk:11.10.1'
+	api 'com.applovin:applovin-sdk:12.0.0'
 }
 ```
 
@@ -54,7 +54,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.3'
+    api 'io.github.alex-only:max_adapter:1.1.4'
 }
 ```
 
@@ -92,8 +92,8 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:11.10.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
+        <androidPackage spec="com.applovin:applovin-sdk:12.0.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.4"/>
         
     </androidPackages>
 </dependencies>

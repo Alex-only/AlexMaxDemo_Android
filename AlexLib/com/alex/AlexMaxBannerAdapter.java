@@ -77,13 +77,6 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
             return;
         }
 
-        try {
-            if (serverExtra.containsKey("unit_type")) {
-                mUnitType = serverExtra.get("unit_type").toString();
-            }
-        } catch (Throwable e) {
-        }
-
         runOnNetworkRequestThread(new Runnable() {
             @Override
             public void run() {
@@ -134,6 +127,14 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
             isDynamicePrice = true;
             dynamicPrice = maxPriceValue;
         }
+
+        try {
+            if (serverExtra.containsKey("unit_type")) {
+                mUnitType = serverExtra.get("unit_type").toString();
+            }
+        } catch (Throwable e) {
+        }
+
     }
 
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, Map<String, Object> localExtra, final boolean isBiddingRequest) {

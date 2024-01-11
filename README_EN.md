@@ -18,7 +18,7 @@
 
 ## Step 1. Integrate TopOn SDK
 
-Please refer to [TopOn SDK Integration Documentation](https://docs.toponad.com/#/en-us/android/android_doc/android_sdk_config_access) to integrate TopOn SDK, it is recommended to integrate **TopOn v6.1.65 and above**
+Please refer to [TopOn SDK Integration Documentation](https://docs.toponad.com/#/en-us/android/android_doc/android_sdk_config_access) to integrate TopOn SDK, it is recommended to integrate **TopOn v6.2.93 and above**
 
 
 
@@ -32,7 +32,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:11.10.1'
+    api 'com.applovin:applovin-sdk:12.0.0'
 }
 ```
 
@@ -51,7 +51,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.3'
+    api 'io.github.alex-only:max_adapter:1.1.4'
 }
 ```
 
@@ -89,8 +89,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:11.10.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.3"/>
+        <androidPackage spec="com.applovin:applovin-sdk:12.0.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.4"/>
         
     </androidPackages>
 </dependencies>

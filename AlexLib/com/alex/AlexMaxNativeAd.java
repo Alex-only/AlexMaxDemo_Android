@@ -3,8 +3,6 @@ package com.alex;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
-
 import com.anythink.nativead.unitgroup.api.CustomNativeAd;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdRevenueListener;
@@ -33,7 +31,7 @@ public class AlexMaxNativeAd extends CustomNativeAd {
         mMediaHeight = mediaHeight;
         mMaxNativeAdLoader.setNativeAdListener(new MaxNativeAdListener() {
             @Override
-            public void onNativeAdLoaded(@Nullable MaxNativeAdView maxNativeAdView, MaxAd maxAd) {
+            public void onNativeAdLoaded(MaxNativeAdView maxNativeAdView, MaxAd maxAd) {
                 if (maxNativeAdView == null) {
                     if (mLoadCallbackListener != null) {
                         mLoadCallbackListener.onFail("", "Max return MaxNativeAdView is null.");

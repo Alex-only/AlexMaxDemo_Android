@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.anythink.core.api.ATInitMediation;
+import com.anythink.core.api.ATSDK;
 import com.anythink.core.api.MediationInitCallback;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
@@ -70,16 +71,6 @@ public class AlexMaxInitManager extends ATInitMediation {
             mSdkKey = sdkKey;
         }
 
-
-        if (mAppLovinSdk != null) {
-            prepareDynameicUnit(mAppLovinSdk, serviceExtras);
-            if (initListener != null) {
-                initListener.onSuccess();
-            }
-            return;
-        }
-
-
         try {
             boolean coppaSwitch = (boolean) serviceExtras.get("app_coppa_switch");
             if (coppaSwitch) {
@@ -101,10 +92,20 @@ public class AlexMaxInitManager extends ATInitMediation {
 
         }
 
+        if (mAppLovinSdk != null) {
+            prepareUserId(mAppLovinSdk);
+            prepareDynameicUnit(mAppLovinSdk, serviceExtras);
+            if (initListener != null) {
+                initListener.onSuccess();
+            }
+            return;
+        }
+
         final AppLovinSdk appLovinSdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(context), context);
 
+        prepareUserId(appLovinSdk);
         prepareDynameicUnit(appLovinSdk, serviceExtras);
-//        appLovinSdk.getSettings().setVerboseLogging(true);
+        appLovinSdk.getSettings().setVerboseLogging(ATSDK.isNetworkLogDebug());
         appLovinSdk.setMediationProvider("max");
         if (mMute != null) {
             appLovinSdk.getSettings().setMuted(mMute);
@@ -135,7 +136,6 @@ public class AlexMaxInitManager extends ATInitMediation {
 
         mIsLoading.set(true);
 
-
         appLovinSdk.initializeSdk(new AppLovinSdk.SdkInitializationListener() {
             @Override
             public void onSdkInitialized(AppLovinSdkConfiguration appLovinSdkConfiguration) {
@@ -145,6 +145,17 @@ public class AlexMaxInitManager extends ATInitMediation {
             }
         });
 
+    }
+
+    private void prepareUserId(AppLovinSdk appLovinSdk) {
+        try {
+            String userId = getUserId();
+            if (!TextUtils.isEmpty(userId)) {
+                appLovinSdk.setUserIdentifier(userId);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     private void prepareDynameicUnit(AppLovinSdk appLovinSdk, Map<String, Object> serviceExtras) {
