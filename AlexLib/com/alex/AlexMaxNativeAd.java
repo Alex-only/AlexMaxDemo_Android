@@ -43,7 +43,9 @@ public class AlexMaxNativeAd extends CustomNativeAd {
                 Map<String, Object> networkInfoMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 setNetworkInfoMap(networkInfoMap);
 
-
+                if (mLoadCallbackListener != null) {
+                    mLoadCallbackListener.onSuccess(AlexMaxNativeAd.this, maxAd, networkInfoMap);
+                }
             }
 
             @Override
