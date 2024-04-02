@@ -20,9 +20,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ## 一. 接入TopOn SDK
 
-请参考[TopOn SDK集成文档](https://docs.toponad.com/#/zh-cn/android/android_doc/android_sdk_config_access)接入TopOn SDK，建议接入**TopOn v6.2.93及以上版本**
-
-
+请从TopOn后台下载接入SDK，建议接入**TopOn v6.2.93及以上版本**。
 
 ## 二. 引入Max SDK&Alex Adapter
 
@@ -111,7 +109,7 @@ dependencies {
 
 以接入Admob为例：
 
-1.1 先到 [TopOn后台](https://docs.toponad.com/#/zh-cn/android/download/package)，查看接入的TopOn版本兼容的Admob版本是多少？（TopOn v6.2.72版本兼容的Admob版本为v22.3.0）
+1.1 先到TopOn后台，查看接入的TopOn版本兼容的Admob版本是多少？（TopOn v6.2.72版本兼容的Admob版本为v22.3.0）
 
 1.2 然后到 [Max后台](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information)，根据接入的Max SDK版本（v11.10.1）和Admob版本（v22.3.0），查找对应的Adapter版本（即v22.3.0.0）
 
