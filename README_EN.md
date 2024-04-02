@@ -18,7 +18,7 @@
 
 ## Step 1. Integrate TopOn SDK
 
-Please refer to [TopOn SDK Integration Documentation](https://docs.toponad.com/#/en-us/android/android_doc/android_sdk_config_access) to integrate TopOn SDK, it is recommended to integrate **TopOn v6.2.93 and above**
+Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.2.93 and above**
 
 
 
@@ -108,7 +108,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 
 Take access to Admob as an example:
 
-1.1 Go to [TopOn Backstage](https://docs.toponad.com/#/en-us/android/download/package) first, and check which version of Admob is compatible with the connected TopOn version? (The Admob version compatible with TopOn v6.2.72 is v22.3.0)
+1.1 Go to TopOn Background first, and check which version of Admob is compatible with the connected TopOn version? (The Admob version compatible with TopOn v6.2.72 is v22.3.0)
 
 1.2 Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.10.1) and Admob version (v22.3.0), find the corresponding Adapter version (that is, v22.3.0.0)
 
