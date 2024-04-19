@@ -22,6 +22,9 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 请从TopOn后台下载接入SDK，建议接入**TopOn v6.2.93及以上版本**。
 
+**注意**：在调用new ATRewardVideoAd()、new ATInterstitial()、new ATBannerView()时，**必须传入Activity**，否则Max广告将请求失败
+
+
 ## 二. 引入Max SDK&Alex Adapter
 
 ### Android
