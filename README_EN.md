@@ -1,3 +1,9 @@
+**Changle Log v1.1.6:**
+
+1.Support Max v12.5.0
+
+
+
 **Changle Log v1.1.3:**
 
 1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
@@ -18,7 +24,7 @@
 
 ## Step 1. Integrate TopOn SDK
 
-Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.2.93 and above**
+Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.3.52 and above**
 
 
 
@@ -32,7 +38,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:12.0.0'
+    api 'com.applovin:applovin-sdk:12.5.0'
 }
 ```
 
@@ -51,7 +57,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.5'
+    api 'io.github.alex-only:max_adapter:1.1.6'
 }
 ```
 
@@ -89,8 +95,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:12.0.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.5"/>
+        <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.6"/>
         
     </androidPackages>
 </dependencies>
@@ -296,9 +302,9 @@ ATSDK.setNetworkLogDebug(true);//The SDK log function is recommended to be turne
 (1) The device ID (GAID) can be obtained through the following logs
 
 ```java
-anythink: ********************************** UA_6.2.72 *************************************
+anythink: ********************************** UA_6.x.xx *************************************
 anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
-anythink: ********************************** UA_6.2.72 *************************************
+anythink: ********************************** UA_6.x.xx *************************************
 ```
 
 

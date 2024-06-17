@@ -1,3 +1,9 @@
+**v1.1.6版本更新说明:**
+
+支持Max v12.5.0
+
+
+
 **v1.1.3版本更新说明:**
 
 1.支持Max的自渲染广告接入，目前能适配Applovin，Admob（com.applovin.mediation:google-adapter版本必须是v22.1.0.1以上）的接入
@@ -20,7 +26,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ## 一. 接入TopOn SDK
 
-请从TopOn后台下载接入SDK，建议接入**TopOn v6.2.93及以上版本**。
+请从TopOn后台下载接入SDK，建议接入**TopOn v6.3.52及以上版本**。
 
 **注意**：在调用new ATRewardVideoAd()、new ATInterstitial()、new ATBannerView()时，**必须传入Activity**，否则Max广告将请求失败
 
@@ -36,7 +42,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 ```java
 dependencies {
     //Max SDK
-	api 'com.applovin:applovin-sdk:12.0.0'
+    api 'com.applovin:applovin-sdk:12.5.0'
 }
 ```
 
@@ -55,7 +61,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.5'
+    api 'io.github.alex-only:max_adapter:1.1.6'
 }
 ```
 
@@ -93,8 +99,8 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:12.0.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.5"/>
+        <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.6"/>
         
     </androidPackages>
 </dependencies>
@@ -300,9 +306,9 @@ ATSDK.setNetworkLogDebug(true);//SDK日志功能，集成测试阶段建议开�
 （1）可通过以下日志获取设备ID(GAID)
 
 ```java
-anythink: ********************************** UA_6.2.72 *************************************
+anythink: ********************************** UA_6.x.xx *************************************
 anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
-anythink: ********************************** UA_6.2.72 *************************************
+anythink: ********************************** UA_6.x.xx *************************************
 ```
 
 

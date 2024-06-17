@@ -1,21 +1,28 @@
 package com.alex;
 
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.os.HandlerThread;
 import android.text.TextUtils;
 
+import com.anythink.core.api.ATAdapterLogUtil;
 import com.anythink.core.api.ATInitMediation;
 import com.anythink.core.api.ATSDK;
 import com.anythink.core.api.MediationInitCallback;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
+import com.applovin.sdk.AppLovinMediationProvider;
 import com.applovin.sdk.AppLovinPrivacySettings;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
 import com.applovin.sdk.AppLovinSdkSettings;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +47,17 @@ public class AlexMaxInitManager extends ATInitMediation {
 
     Map<String, Map<String, AlexMaxBiddingInfo>> mAdCacheMap;
 
+    AtomicBoolean mHasCallbackInit = new AtomicBoolean();
+
+    private final String APPLOVIN_MEDIATION_INIT_MANAGER = "com.anythink.network.applovin.ApplovinATInitManager";
+
+    private Object initManagerInstance;
+    private Method initSDKMediationAppLovinMethod;
+    private Method getAppLovinSDKMethod;
+
+
     private AlexMaxInitManager() {
+        initByATInitManagerState();
     }
 
     public static AlexMaxInitManager getInstance() {
@@ -54,6 +71,22 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
     protected AppLovinSdk getApplovinSdk() {
+        if (mAppLovinSdk != null) {
+            return mAppLovinSdk;
+        }
+
+        try {
+            if (getAppLovinSDKMethod != null) {
+                Object object = getAppLovinSDKMethod.invoke(initManagerInstance);
+                ATAdapterLogUtil.i(TAG, "getApplovinSdk, by applovin init manager, obj=" + object);
+                if (object instanceof AppLovinSdk) {
+                    mAppLovinSdk = ((AppLovinSdk) object);
+                }
+            }
+        } catch (Throwable e) {
+            ATAdapterLogUtil.e(TAG, "getApplovinSdk error", e);
+        }
+
         return mAppLovinSdk;
     }
 
@@ -65,8 +98,22 @@ public class AlexMaxInitManager extends ATInitMediation {
     private List<MediationInitCallback> mListeners;
 
     public synchronized void initSDK(Context context, Map<String, Object> serviceExtras, final MediationInitCallback initListener) {
-
         String sdkKey = (String) serviceExtras.get("sdk_key");
+
+        if (initSDKMediationAppLovinMethod != null) {
+            //AppLovin存在时，优先通过AppLovin 去初始化sdk
+            try {
+                serviceExtras.put("sdkkey", sdkKey);//ApplovinATInitManager使用的是sdkkey
+
+                ATAdapterLogUtil.i(TAG, "initSDK, by applovin init manager");
+                initSDKMediationAppLovinMethod.invoke(initManagerInstance, context, serviceExtras, initListener);
+                return;
+            } catch (Throwable t) {
+                ATAdapterLogUtil.e(TAG, "initSDK", t);
+            }
+        }
+
+
         if (TextUtils.isEmpty(mSdkKey) || !TextUtils.equals(mSdkKey, sdkKey)) {
             mSdkKey = sdkKey;
         }
@@ -93,29 +140,34 @@ public class AlexMaxInitManager extends ATInitMediation {
         }
 
         if (mAppLovinSdk != null) {
-            prepareUserId(mAppLovinSdk);
-            prepareDynameicUnit(mAppLovinSdk, serviceExtras);
+            AppLovinSdkSettings settings = mAppLovinSdk.getSettings();
+            if (settings != null) {
+                prepareUserId(settings);
+                prepareDynameicUnit(settings, serviceExtras);
+            }
             if (initListener != null) {
                 initListener.onSuccess();
             }
             return;
         }
 
-        final AppLovinSdk appLovinSdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(context), context);
-
-        prepareUserId(appLovinSdk);
-        prepareDynameicUnit(appLovinSdk, serviceExtras);
-        appLovinSdk.getSettings().setVerboseLogging(ATSDK.isNetworkLogDebug());
-        appLovinSdk.setMediationProvider("max");
-        if (mMute != null) {
-            appLovinSdk.getSettings().setMuted(mMute);
+        final AppLovinSdk appLovinSdk = AppLovinSdk.getInstance(context);
+        AppLovinSdkSettings settings = appLovinSdk.getSettings();
+        if (settings != null) {
+            prepareUserId(settings);
+            prepareDynameicUnit(settings, serviceExtras);
+            settings.setVerboseLogging(ATSDK.isNetworkLogDebug());
+            if (mMute != null) {
+                settings.setMuted(mMute);
+            }
         }
+
         if (appLovinSdk != null && appLovinSdk.isInitialized()) {
             mAppLovinSdk = appLovinSdk;
             if (initListener != null) {
                 initListener.onSuccess();
             }
-            callbackResult();
+            callbackResult("");
             return;
         }
 
@@ -136,29 +188,85 @@ public class AlexMaxInitManager extends ATInitMediation {
 
         mIsLoading.set(true);
 
-        appLovinSdk.initializeSdk(new AppLovinSdk.SdkInitializationListener() {
+        // Create the initialization configuration
+        AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder( sdkKey, context )
+                .setMediationProvider( AppLovinMediationProvider.MAX )
+                // Perform any additional configuration/setting changes
+                .build();
+
+
+        final CountDownTimer[] countDownTimer = new CountDownTimer[1];
+        HandlerThread mHandlerThread = new HandlerThread("alex_max_init") {
+            @Override
+            protected void onLooperPrepared() {
+                countDownTimer[0] = new CountDownTimer(5000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        if (mHasCallbackInit.get()) {
+                            ATAdapterLogUtil.i(TAG, "onTick: has callback init, return");
+                            return;
+                        }
+
+                        if (appLovinSdk.isInitialized()) {
+                            ATAdapterLogUtil.i(TAG, "onTick: callback init");
+                            if (mHasCallbackInit.compareAndSet(false, true)) {
+                                mAppLovinSdk = appLovinSdk;
+                                mIsLoading.set(false);
+                                callbackResult("");
+                            }
+                        } else {
+                            ATAdapterLogUtil.i(TAG, "onTick: isInitialized = false");
+                        }
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        if (mHasCallbackInit.compareAndSet(false, true)) {
+                            ATAdapterLogUtil.e(TAG, "onFinish: callback timeout");
+                            mIsLoading.set(false);
+                            callbackResult("init timeout");
+                        }
+                    }
+                };
+                countDownTimer[0].start();
+            }
+        };
+        mHandlerThread.start();
+
+        appLovinSdk.initialize(initConfig, new AppLovinSdk.SdkInitializationListener() {
             @Override
             public void onSdkInitialized(AppLovinSdkConfiguration appLovinSdkConfiguration) {
-                mAppLovinSdk = appLovinSdk;
-                mIsLoading.set(false);
-                callbackResult();
+                try {
+                    if (countDownTimer[0] != null) {
+                        countDownTimer[0].cancel();
+                    }
+
+                    mHandlerThread.quit();
+                } catch (Throwable e) {
+                }
+
+                if (mHasCallbackInit.compareAndSet(false, true)) {
+                    mAppLovinSdk = appLovinSdk;
+                    mIsLoading.set(false);
+                    callbackResult("");
+                }
             }
         });
 
     }
 
-    private void prepareUserId(AppLovinSdk appLovinSdk) {
+    private void prepareUserId(AppLovinSdkSettings appLovinSdkSettings) {
         try {
             String userId = getUserId();
             if (!TextUtils.isEmpty(userId)) {
-                appLovinSdk.setUserIdentifier(userId);
+                appLovinSdkSettings.setUserIdentifier(userId);
             }
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    private void prepareDynameicUnit(AppLovinSdk appLovinSdk, Map<String, Object> serviceExtras) {
+    private void prepareDynameicUnit(AppLovinSdkSettings sdkSettings, Map<String, Object> serviceExtras) {
         JSONObject unitJSONObject = null;
         try {
             Object maxUnitInfoObj = AlexMaxConst.getMaxUnitInfoObj(serviceExtras);
@@ -206,7 +314,6 @@ public class AlexMaxInitManager extends ATInitMediation {
         }
 
         //Disable auto cache
-        AppLovinSdkSettings sdkSettings = appLovinSdk.getSettings();
         sdkSettings.setExtraParameter("disable_b2b_ad_unit_ids", unitIds);
 
         String disableRetryFormat = "";
@@ -235,8 +342,7 @@ public class AlexMaxInitManager extends ATInitMediation {
         sdkSettings.setExtraParameter("disable_auto_retry_ad_formats", disableRetryFormat);
     }
 
-    private void callbackResult() {
-
+    private void callbackResult(String errorMsg) {
         List<MediationInitCallback> Listeners;
         synchronized (mLock) {
             if (mListeners == null) {
@@ -254,6 +360,13 @@ public class AlexMaxInitManager extends ATInitMediation {
 
         for (MediationInitCallback initListener : Listeners) {
             try {
+                if (!TextUtils.isEmpty(errorMsg)) {
+                    if (initListener != null) {
+                        initListener.onFail(errorMsg);
+                    }
+                    return;
+                }
+
                 if (initListener != null) {
                     initListener.onSuccess();
                 }
@@ -360,8 +473,49 @@ public class AlexMaxInitManager extends ATInitMediation {
 
     public void setMute(boolean isMuted) {
         mMute = isMuted;
-        if (mAppLovinSdk != null) {
-            mAppLovinSdk.getSettings().setMuted(isMuted);
+
+        AppLovinSdk applovinSdk = getApplovinSdk();
+        if (applovinSdk != null) {
+            applovinSdk.getSettings().setMuted(isMuted);
         }
     }
+
+    private Object getAppLovinInitManagerInstance(){
+        if (initManagerInstance != null) {
+            return initManagerInstance;
+        }
+
+        try {
+            Class<? extends ATInitMediation> nativeClass = Class.forName(
+                    APPLOVIN_MEDIATION_INIT_MANAGER).asSubclass(ATInitMediation.class);
+            final Constructor<?> nativeConstructor = nativeClass.getDeclaredConstructor(
+                    (Class[]) null);
+            nativeConstructor.setAccessible(true);
+            //get ApplovinATInitManager
+            ATInitMediation ttInitManagerObj = (ATInitMediation) nativeConstructor.newInstance();
+            Method getInstanceAppLovinMethod = ttInitManagerObj.getClass().getMethod("getInstance");
+            //调用 getInstance 方法
+            Object applovinInitManagerInstance = getInstanceAppLovinMethod.invoke(ttInitManagerObj);
+            return applovinInitManagerInstance;
+        } catch (Throwable t){
+            ATAdapterLogUtil.e(TAG, "initSDK", t);
+        }
+        return null;
+    }
+
+    private void initByATInitManagerState() {
+        try {
+            //获取 InitManager Instance
+            initManagerInstance = getAppLovinInitManagerInstance();
+            if (initManagerInstance != null) {
+                initSDKMediationAppLovinMethod = initManagerInstance.getClass().getMethod("initSDK", Context.class, Map.class, MediationInitCallback.class);
+                getAppLovinSDKMethod = initManagerInstance.getClass().getMethod("getAppLovinSDK");
+            }
+        } catch (Throwable t) {
+            if (ATSDK.isNetworkLogDebug()) {
+                t.printStackTrace();
+            }
+        }
+    }
+
 }
