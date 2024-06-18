@@ -1,4 +1,4 @@
-**v1.1.6版本更新说明:**
+**v1.1.7版本更新说明:**
 
 支持Max v12.5.0
 
@@ -61,7 +61,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.6'
+    api 'io.github.alex-only:max_adapter:1.1.7'
 }
 ```
 
@@ -100,7 +100,7 @@ dependencies {
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.6"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.7"/>
         
     </androidPackages>
 </dependencies>

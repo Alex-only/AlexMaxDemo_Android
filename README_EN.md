@@ -1,4 +1,4 @@
-**Changle Log v1.1.6:**
+**Changle Log v1.1.7:**
 
 1.Support Max v12.5.0
 
@@ -57,7 +57,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.6'
+    api 'io.github.alex-only:max_adapter:1.1.7'
 }
 ```
 
@@ -96,7 +96,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.6"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.1.7"/>
         
     </androidPackages>
 </dependencies>
