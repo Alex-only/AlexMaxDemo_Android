@@ -36,8 +36,12 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
     @Override
     public void show(Activity activity) {
-        if (mMaxInterstitialAd != null) {
-            mMaxInterstitialAd.showAd();
+        try {
+            if (mMaxInterstitialAd != null) {
+                mMaxInterstitialAd.showAd(activity);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +76,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                startLoadAd((Activity) context, AlexMaxInitManager.getInstance().getApplovinSdk(), false);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), false);
             }
 
             @Override
@@ -103,14 +107,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
     }
 
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding) {
-        if (!(context instanceof Activity)) {
-            if (mLoadListener != null) {
-                mLoadListener.onAdLoadError("", "Max: context must be activity");
-            }
-            return;
-        }
-
-        mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId, appLovinSdk, (Activity) context);
+        mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId, appLovinSdk, context);
         if (isDynamicePrice) {
             mMaxInterstitialAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }
@@ -227,13 +224,6 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
     @Override
     public boolean startBiddingRequest(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
         initRequestParams(serverExtra);
-        if (!(context instanceof Activity)) {
-            if (biddingListener != null) {
-                ATBiddingResult biddingResult = ATBiddingResult.fail("Max: context must be activity");
-                biddingListener.onC2SBidResult(biddingResult);
-            }
-            return true;
-        }
         this.mBiddingListener = biddingListener;
 
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
