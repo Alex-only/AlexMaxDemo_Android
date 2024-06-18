@@ -259,13 +259,14 @@ Create app and ad unit in MAX-->Manage-->Ad Units
 
 The corresponding relationship between MAX’s Unit and TopOn’s placement type is as follows:
 
-| MAX-Unit     | TopOn-placement |
-| ------------ | --------------- |
-| Banner       | Banner          |
-| Interstitial | Interstitial    |
-| Rewarded     | Rewarded Video  |
-| App Open     | Splash          |
-| Native       | Native          |
+| MAX-Unit               | TopOn-placement          |
+| ---------------------- | ------------------------ |
+| Banner                 | Banner                   |
+| Interstitial           | Interstitial             |
+| Rewarded               | Rewarded Video           |
+| App Open               | Splash                   |
+| Native (Manual)        | Native - self render     |
+| Native (Small、Medium) | Native - template render |
 
 
 

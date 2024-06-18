@@ -263,13 +263,14 @@ public class MainActivity extends Activity
 
 MAX的Unit跟TopOn的广告类型对应关系如下：
 
-| MAX-Unit     | TopOn-广告类型              |
-| ------------ | --------------------------- |
-| Banner       | 横幅广告 Banner             |
-| Interstitial | 插屏广告 Interstitial       |
-| Rewarded     | 激励视频广告 Rewarded Video |
-| App Open     | 开屏广告 Splash             |
-| Native       | 原生广告 Native             |
+| MAX-Unit                | TopOn-广告类型              |
+| ----------------------- | --------------------------- |
+| Banner                  | 横幅广告 Banner             |
+| Interstitial            | 插屏广告 Interstitial       |
+| Rewarded                | 激励视频广告 Rewarded Video |
+| App Open                | 开屏广告 Splash             |
+| Native（Manual）        | 原生广告 - 自渲染 Native    |
+| Native（Small、Medium） | 原生广告 - 模板渲染 Native  |
 
 
 
