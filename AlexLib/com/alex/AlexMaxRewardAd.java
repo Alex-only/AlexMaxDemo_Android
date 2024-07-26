@@ -1,6 +1,7 @@
 package com.alex;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxError;
@@ -21,8 +22,8 @@ public class AlexMaxRewardAd {
     MaxRewardedAdListener mLoadListener;
     MaxRewardedAdListener mImpressionListener;
 
-    private AlexMaxRewardAd(Activity activity, AppLovinSdk appLovinSdk, String adUnitId) {
-        maxRewardedAd = MaxRewardedAd.getInstance(adUnitId, appLovinSdk, activity);
+    private AlexMaxRewardAd(Context context, AppLovinSdk appLovinSdk, String adUnitId) {
+        maxRewardedAd = MaxRewardedAd.getInstance(adUnitId, appLovinSdk, context);
         maxRewardedAdListener = new MaxRewardedAdListener() {
 
             @Override
@@ -98,14 +99,14 @@ public class AlexMaxRewardAd {
         maxRewardedAd.setListener(maxRewardedAdListener);
     }
 
-    public synchronized static AlexMaxRewardAd getInstance(Activity activity, AppLovinSdk appLovinSdk, String adUnitId) {
+    public synchronized static AlexMaxRewardAd getInstance(Context context, AppLovinSdk appLovinSdk, String adUnitId) {
         if (maxATRewardAdMap == null) {
             maxATRewardAdMap = new ConcurrentHashMap<>();
         }
 
         AlexMaxRewardAd alexMaxRewardAd = maxATRewardAdMap.get(adUnitId);
         if (alexMaxRewardAd == null) {
-            alexMaxRewardAd = new AlexMaxRewardAd(activity, appLovinSdk, adUnitId);
+            alexMaxRewardAd = new AlexMaxRewardAd(context, appLovinSdk, adUnitId);
             maxATRewardAdMap.put(adUnitId, alexMaxRewardAd);
         }
         return alexMaxRewardAd;
@@ -116,9 +117,9 @@ public class AlexMaxRewardAd {
         maxRewardedAd.loadAd();
     }
 
-    public void show(MaxRewardedAdListener rewardedVideoEventListener) {
+    public void show(Activity activity, MaxRewardedAdListener rewardedVideoEventListener) {
         mImpressionListener = rewardedVideoEventListener;
-        maxRewardedAd.showAd();
+        maxRewardedAd.showAd(activity);
     }
 
     public void setExtraParameter(String key, String values) {

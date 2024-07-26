@@ -5,6 +5,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.anythink.core.api.ATAdConst;
 import com.anythink.core.api.ATBiddingListener;
 import com.anythink.core.api.ATBiddingResult;
 import com.anythink.core.api.MediationInitCallback;
@@ -16,6 +17,7 @@ import com.applovin.mediation.MaxRewardedAdListener;
 import com.applovin.mediation.ads.MaxRewardedAd;
 import com.applovin.sdk.AppLovinSdk;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
@@ -37,7 +39,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
     @Override
     public void show(Activity activity) {
         if (mMaxRewardedAd != null) {
-            mMaxRewardedAd.show(createImpressionListener());
+            mMaxRewardedAd.show(activity, createImpressionListener());
         }
     }
 
@@ -114,15 +116,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
 
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBiddingRequest) {
 
-        //Normal Request
-        if (!(context instanceof Activity)) {
-            if (mLoadListener != null) {
-                mLoadListener.onAdLoadError("", "Max: context must be activity");
-            }
-            return;
-        }
-
-        mMaxRewardedAd = AlexMaxRewardAd.getInstance((Activity) context, appLovinSdk, mAdUnitId);
+        mMaxRewardedAd = AlexMaxRewardAd.getInstance(context, appLovinSdk, mAdUnitId);
         if (isDynamicePrice) {
             mMaxRewardedAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }
@@ -245,6 +239,22 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
                 if (mExtraMap == null) {
                     mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 }
+
+                try {
+                    if (maxReward != null) {
+                        if (mExtraMap == null) {
+                            mExtraMap = new HashMap<>();
+                        }
+                        Map<String, Object> rewardMap = new HashMap<>();
+                        rewardMap.put(AlexMaxConst.REWARD_EXTRA.REWARD_EXTRA_KEY_REWARD_AMOUNT, maxReward.getAmount());
+                        rewardMap.put(AlexMaxConst.REWARD_EXTRA.REWARD_EXTRA_KEY_REWARD_LABEL, maxReward.getLabel());
+
+                        mExtraMap.put(ATAdConst.REWARD_EXTRA.REWARD_INFO, rewardMap);
+                    }
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+
                 if (mImpressionListener != null) {
                     mImpressionListener.onReward();
                 }
@@ -321,13 +331,6 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
     public boolean startBiddingRequest(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
         initRequestParams(serverExtra);
 
-        if (!(context instanceof Activity)) {
-            if (biddingListener != null) {
-                ATBiddingResult biddingResult = ATBiddingResult.fail("Max: context must be activity");
-                biddingListener.onC2SBidResult(biddingResult);
-            }
-            return true;
-        }
         this.mBiddingListener = biddingListener;
 
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {

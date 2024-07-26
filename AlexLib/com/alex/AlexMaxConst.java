@@ -6,7 +6,13 @@ import java.util.Map;
 
 public class AlexMaxConst {
 
+    private static final String ADAPTER_VERSION = "1.1.9";
     public static final String IS_ADAPTIVE = "is_adaptive";
+
+    public static class REWARD_EXTRA {
+        public static final String REWARD_EXTRA_KEY_REWARD_AMOUNT = "alex_reward_amount";
+        public static final String REWARD_EXTRA_KEY_REWARD_LABEL = "alex_reward_label";
+    }
 
     public static String getNetworkVersion() {
         try {
