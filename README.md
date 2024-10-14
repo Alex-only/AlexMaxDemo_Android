@@ -195,6 +195,8 @@ public class MainActivity extends Activity
 
 *广告平台名称需要写上Max，便于区分广告平台，建议名称格式：Max_XXXXX
 
+**注意**：只填写上述两个信息即可，不需要填写应用及广告源参数
+
 ![img](img/image2.png)
 
 **注意**：如果是使用gradle、aar方式或者直接使用源码方式（没有修改类名），请配置以下类名。如果修改了类名，请配置修改后的类名
