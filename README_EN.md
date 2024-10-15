@@ -191,6 +191,8 @@ public class MainActivity extends Activity
 
 *The name of the advertising platform needs to be written with Max, which is convenient for distinguishing the advertising platform. The suggested name format: Max_XXXXX
 
+**Note**: Just fill in the above two information, there is no need to fill in the parameters of app and ad source dimensions.
+
 ![img](img/image2_en.png)
 
 **Note**: If you use the gradle、aar method or directly use the source code method (without modifying the class name), please configure the following class name. If the class name is modified, please configure the modified class name
