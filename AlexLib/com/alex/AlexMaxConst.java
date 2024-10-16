@@ -6,8 +6,19 @@ import java.util.Map;
 
 public class AlexMaxConst {
 
-    private static final String ADAPTER_VERSION = "1.1.9";
+    private static final String ADAPTER_VERSION = "1.2.1";
     public static final String IS_ADAPTIVE = "is_adaptive";
+
+    public static final String KEY_REVENUE = "revenue";
+    public static final String KEY_AD_UNIT_ID = "ad_unit_id";
+    public static final String KEY_FORMAT = "format";
+    public static final String KEY_NETWORK_NAME= "network_name";
+    public static final String KEY_NETWORK_PLACEMENT_ID = "network_placement_id";
+    public static final String KEY_PLACEMENT = "placement";
+    public static final String KEY_COUNTRY_CODE = "country_code";
+    public static final String KEY_CREATIVE_ID = "creative_id";
+
+
 
     public static class REWARD_EXTRA {
         public static final String REWARD_EXTRA_KEY_REWARD_AMOUNT = "alex_reward_amount";

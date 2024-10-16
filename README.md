@@ -61,7 +61,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.1.9'
+    api 'io.github.alex-only:max_adapter:1.2.1'
 }
 ```
 
@@ -100,7 +100,7 @@ dependencies {
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.1.9"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.1"/>
         
     </androidPackages>
 </dependencies>

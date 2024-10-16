@@ -121,6 +121,9 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
             @Override
             public void onAdLoaded(final MaxAd maxAd) {
+                if (mExtraMap == null) {
+                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
+                }
                 if (!isBidding) {
                     if (mLoadListener != null) {
                         mLoadListener.onAdCacheLoaded();
@@ -142,9 +145,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
             @Override
             public void onAdDisplayed(MaxAd maxAd) {
-                if (mExtraMap == null) {
-                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
-                }
+                mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 if (mImpressListener != null) {
                     mImpressListener.onInterstitialAdShow();
                 }

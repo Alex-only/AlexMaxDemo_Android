@@ -22,12 +22,16 @@ public class AlexMaxRewardAd {
     MaxRewardedAdListener mLoadListener;
     MaxRewardedAdListener mImpressionListener;
 
+    MaxAd mMaxAd;
+
     private AlexMaxRewardAd(Context context, AppLovinSdk appLovinSdk, String adUnitId) {
         maxRewardedAd = MaxRewardedAd.getInstance(adUnitId, appLovinSdk, context);
         maxRewardedAdListener = new MaxRewardedAdListener() {
 
             @Override
             public void onAdLoaded(MaxAd maxAd) {
+                mMaxAd = maxAd;
+
                 if (mLoadListener != null) {
                     mLoadListener.onAdLoaded(maxAd);
                 }
@@ -44,19 +48,19 @@ public class AlexMaxRewardAd {
             }
 
             //--------------------------------------------------------------------------------------
-            @Override
-            public void onRewardedVideoStarted(MaxAd maxAd) {
-                if (mImpressionListener != null) {
-                    mImpressionListener.onRewardedVideoStarted(maxAd);
-                }
-            }
-
-            @Override
-            public void onRewardedVideoCompleted(MaxAd maxAd) {
-                if (mImpressionListener != null) {
-                    mImpressionListener.onRewardedVideoCompleted(maxAd);
-                }
-            }
+            //@Override
+            //public void onRewardedVideoStarted(MaxAd maxAd) {
+            //    if (mImpressionListener != null) {
+            //        mImpressionListener.onRewardedVideoStarted(maxAd);
+            //    }
+            //}
+            //
+            //@Override
+            //public void onRewardedVideoCompleted(MaxAd maxAd) {
+            //    if (mImpressionListener != null) {
+            //        mImpressionListener.onRewardedVideoCompleted(maxAd);
+            //    }
+            //}
 
             @Override
             public void onUserRewarded(MaxAd maxAd, MaxReward maxReward) {
@@ -131,6 +135,10 @@ public class AlexMaxRewardAd {
             return maxRewardedAd.isReady();
         }
         return false;
+    }
+
+    public MaxAd getMaxAd() {
+        return mMaxAd;
     }
 
 

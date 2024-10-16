@@ -212,8 +212,8 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
             @Override
             public void onAdLoaded(final MaxAd maxAd) {
                 registerImpressionListener();
+                mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 if (!isBiddingRequest) {
-                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
 
                     if (mLoadListener != null) {
                         mLoadListener.onAdCacheLoaded();

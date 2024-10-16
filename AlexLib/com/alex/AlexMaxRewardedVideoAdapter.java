@@ -57,6 +57,11 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
             if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof AlexMaxRewardAd && ((AlexMaxRewardAd) alexMaxBiddingInfo.adObject).isReady()) {
                 mMaxRewardedAd = (AlexMaxRewardAd) alexMaxBiddingInfo.adObject;
                 createLoadListener(false);
+
+                if (mExtraMap == null) {
+                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(mMaxRewardedAd != null ? mMaxRewardedAd.getMaxAd() : null);
+                }
+
                 if (mLoadListener != null) {
                     mLoadListener.onAdCacheLoaded();
                 }
@@ -130,6 +135,9 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
 
             @Override
             public void onAdLoaded(final MaxAd maxAd) {
+                if (mExtraMap == null) {
+                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
+                }
                 if (!isBiddingRequest) {
                     if (mLoadListener != null) {
                         mLoadListener.onAdCacheLoaded();
@@ -163,15 +171,15 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
                 }
             }
 
-            @Override
-            public void onRewardedVideoStarted(MaxAd maxAd) {
-
-            }
-
-            @Override
-            public void onRewardedVideoCompleted(MaxAd maxAd) {
-
-            }
+            //@Override
+            //public void onRewardedVideoStarted(MaxAd maxAd) {
+            //
+            //}
+            //
+            //@Override
+            //public void onRewardedVideoCompleted(MaxAd maxAd) {
+            //
+            //}
 
             @Override
             public void onUserRewarded(MaxAd maxAd, MaxReward maxReward) {
@@ -214,28 +222,30 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
 
             @Override
             public void onAdDisplayed(MaxAd maxAd) {
-                if (mExtraMap == null) {
-                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
-                }
+                mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 if (mImpressionListener != null) {
                     mImpressionListener.onRewardedVideoAdPlayStart();
                 }
             }
 
-            @Override
-            public void onRewardedVideoStarted(MaxAd maxAd) {
-
-            }
-
-            @Override
-            public void onRewardedVideoCompleted(MaxAd maxAd) {
-                if (mImpressionListener != null) {
-                    mImpressionListener.onRewardedVideoAdPlayEnd();
-                }
-            }
+            //@Override
+            //public void onRewardedVideoStarted(MaxAd maxAd) {
+            //
+            //}
+            //
+            //@Override
+            //public void onRewardedVideoCompleted(MaxAd maxAd) {
+            //    if (mImpressionListener != null) {
+            //        mImpressionListener.onRewardedVideoAdPlayEnd();
+            //    }
+            //}
 
             @Override
             public void onUserRewarded(MaxAd maxAd, MaxReward maxReward) {
+                if (mImpressionListener != null) {
+                    mImpressionListener.onRewardedVideoAdPlayEnd();
+                }
+
                 if (mExtraMap == null) {
                     mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 }

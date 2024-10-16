@@ -94,6 +94,9 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         mMaxAppOpenAd.setListener(new MaxAdListener() {
             @Override
             public void onAdLoaded(final MaxAd maxAd) {
+                if (mExtraMap == null) {
+                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
+                }
                 if (!isBidding) {
                     if (mLoadListener != null) {
                         mLoadListener.onAdCacheLoaded();
@@ -114,9 +117,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
 
             @Override
             public void onAdDisplayed(MaxAd maxAd) {
-                if (mExtraMap == null) {
-                    mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
-                }
+                mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
                 if (mImpressionListener != null) {
                     mImpressionListener.onSplashAdShow();
                 }

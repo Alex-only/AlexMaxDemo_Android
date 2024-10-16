@@ -9,6 +9,7 @@ import com.anythink.core.api.ATAdapterLogUtil;
 import com.anythink.core.api.ATInitMediation;
 import com.anythink.core.api.ATSDK;
 import com.anythink.core.api.MediationInitCallback;
+import com.applovin.impl.sdk.AppLovinSdkInitializationConfigurationImpl;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.sdk.AppLovinMediationProvider;
@@ -117,17 +118,17 @@ public class AlexMaxInitManager extends ATInitMediation {
         if (TextUtils.isEmpty(mSdkKey) || !TextUtils.equals(mSdkKey, sdkKey)) {
             mSdkKey = sdkKey;
         }
-
-        try {
-            boolean coppaSwitch = (boolean) serviceExtras.get("app_coppa_switch");
-            if (coppaSwitch) {
-                AppLovinPrivacySettings.setIsAgeRestrictedUser(true, context);
-            } else {
-                AppLovinPrivacySettings.setIsAgeRestrictedUser(false, context);
-            }
-        } catch (Throwable e) {
-
-        }
+        //remove since 13.0.0
+        //try {
+        //    boolean coppaSwitch = (boolean) serviceExtras.get("app_coppa_switch");
+        //    if (coppaSwitch) {
+        //        AppLovinPrivacySettings.setIsAgeRestrictedUser(true, context);
+        //    } else {
+        //        AppLovinPrivacySettings.setIsAgeRestrictedUser(false, context);
+        //    }
+        //} catch (Throwable e) {
+        //
+        //}
         try {
             boolean ccpaSwitch = (boolean) serviceExtras.get("app_ccpa_switch");
             if (ccpaSwitch) {
@@ -189,7 +190,7 @@ public class AlexMaxInitManager extends ATInitMediation {
         mIsLoading.set(true);
 
         // Create the initialization configuration
-        AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder( sdkKey, context )
+        AppLovinSdkInitializationConfiguration initConfig = new AppLovinSdkInitializationConfigurationImpl.BuilderImpl( sdkKey, context )
                 .setMediationProvider( AppLovinMediationProvider.MAX )
                 // Perform any additional configuration/setting changes
                 .build();
@@ -461,6 +462,18 @@ public class AlexMaxInitManager extends ATInitMediation {
         maxAdMap.put("Placement", maxAd.getPlacement());
         String countryCode = mAppLovinSdk != null ? mAppLovinSdk.getConfiguration().getCountryCode() : "";
         maxAdMap.put("CountryCode", countryCode);
+
+
+        maxAdMap.put(AlexMaxConst.KEY_REVENUE, maxAd.getRevenue());
+        maxAdMap.put(AlexMaxConst.KEY_AD_UNIT_ID, maxAd.getAdUnitId());
+        maxAdMap.put(AlexMaxConst.KEY_CREATIVE_ID, maxAd.getCreativeId());
+        maxAdMap.put(AlexMaxConst.KEY_FORMAT, maxAd.getFormat().getLabel());
+        maxAdMap.put(AlexMaxConst.KEY_NETWORK_NAME, maxAd.getNetworkName());
+        maxAdMap.put(AlexMaxConst.KEY_NETWORK_PLACEMENT_ID, maxAd.getNetworkPlacement());
+        maxAdMap.put(AlexMaxConst.KEY_PLACEMENT, maxAd.getPlacement());
+        maxAdMap.put(AlexMaxConst.KEY_COUNTRY_CODE, countryCode);
+
+
         return maxAdMap;
     }
 
