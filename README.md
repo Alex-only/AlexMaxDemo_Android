@@ -1,3 +1,8 @@
+**v1.2.1版本更新说明:**
+
+支持Max v13.0.0
+
+
 **v1.1.7版本更新说明:**
 
 支持Max v12.5.0
@@ -42,7 +47,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 ```java
 dependencies {
     //Max SDK
-    api 'com.applovin:applovin-sdk:12.5.0'
+    api 'com.applovin:applovin-sdk:13.0.0'
 }
 ```
 
@@ -99,7 +104,7 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.0.0"/>
         <androidPackage spec="io.github.alex-only:max_adapter:1.2.1"/>
         
     </androidPackages>
