@@ -1,3 +1,8 @@
+**Changle Log v1.2.1:**
+
+1.Support Max v13.0.0
+
+
 **Changle Log v1.1.7:**
 
 1.Support Max v12.5.0
@@ -38,7 +43,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:12.5.0'
+    api 'com.applovin:applovin-sdk:13.0.0'
 }
 ```
 
@@ -95,7 +100,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:12.5.0"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.0.0"/>
         <androidPackage spec="io.github.alex-only:max_adapter:1.2.1"/>
         
     </androidPackages>
