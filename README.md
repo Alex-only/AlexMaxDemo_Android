@@ -1,3 +1,9 @@
+**温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2版本的Adapter
+
+**v1.2.2版本更新说明:**
+
+支持Max v13.0.0。[对于儿童用户，不会初始化Max SDK。](https://developers.applovin.com/en/max/android/overview/privacy/#children)
+
 **v1.2.1版本更新说明:**
 
 支持Max v13.0.0
@@ -66,7 +72,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.1'
+    api 'io.github.alex-only:max_adapter:1.2.2'
 }
 ```
 
@@ -105,7 +111,7 @@ dependencies {
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:13.0.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.1"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.2"/>
         
     </androidPackages>
 </dependencies>

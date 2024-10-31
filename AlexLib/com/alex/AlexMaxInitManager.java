@@ -55,6 +55,7 @@ public class AlexMaxInitManager extends ATInitMediation {
     private Object initManagerInstance;
     private Method initSDKMediationAppLovinMethod;
     private Method getAppLovinSDKMethod;
+    private Method setIsAgeRestrictedUserMethod;
 
 
     private AlexMaxInitManager() {
@@ -114,21 +115,36 @@ public class AlexMaxInitManager extends ATInitMediation {
             }
         }
 
+        try {
+            boolean coppaSwitch = getBooleanFromMap(serviceExtras, "app_coppa_switch");
+            if (AppLovinSdk.VERSION_CODE >= 13000000) {
+                //从v13.0.0开始，不支持儿童用户
+                if (coppaSwitch) {
+                    if (initListener != null) {
+                        initListener.onFail("AppLovin SDK 13.0.0 or higher does not support child users.");
+                    }
+                    return;
+                }
+            } else {
+                //AppLovinPrivacySettings.setIsAgeRestrictedUser(true, context);
+                try {
+                    if (setIsAgeRestrictedUserMethod == null) {
+                        setIsAgeRestrictedUserMethod = AppLovinPrivacySettings.class.getDeclaredMethod("setIsAgeRestrictedUser", boolean.class, Context.class);
+                    }
+                    setIsAgeRestrictedUserMethod.setAccessible(true);
+                    setIsAgeRestrictedUserMethod.invoke(null, coppaSwitch, context);
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Throwable e) {
+        }
+
 
         if (TextUtils.isEmpty(mSdkKey) || !TextUtils.equals(mSdkKey, sdkKey)) {
             mSdkKey = sdkKey;
         }
-        //remove since 13.0.0
-        //try {
-        //    boolean coppaSwitch = (boolean) serviceExtras.get("app_coppa_switch");
-        //    if (coppaSwitch) {
-        //        AppLovinPrivacySettings.setIsAgeRestrictedUser(true, context);
-        //    } else {
-        //        AppLovinPrivacySettings.setIsAgeRestrictedUser(false, context);
-        //    }
-        //} catch (Throwable e) {
-        //
-        //}
+
         try {
             boolean ccpaSwitch = (boolean) serviceExtras.get("app_ccpa_switch");
             if (ccpaSwitch) {

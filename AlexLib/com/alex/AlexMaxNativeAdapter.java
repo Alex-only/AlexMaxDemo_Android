@@ -74,7 +74,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
 
             @Override
             public void onFail(String errorMsg) {
-
+                notifyATLoadFail("", "Max: " + errorMsg);
             }
         });
     }

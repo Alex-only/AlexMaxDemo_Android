@@ -92,7 +92,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
 
             @Override
             public void onFail(String errorMsg) {
-
+                notifyATLoadFail("", "Max: " + errorMsg);
             }
         });
     }

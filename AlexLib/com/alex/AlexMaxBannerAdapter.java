@@ -101,7 +101,7 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
 
                     @Override
                     public void onFail(String errorMsg) {
-
+                        notifyATLoadFail("", "Max: " + errorMsg);
                     }
                 });
             }

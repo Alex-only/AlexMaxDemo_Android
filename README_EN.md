@@ -1,15 +1,19 @@
-**Changle Log v1.2.1:**
+**Notes:** Developers who comply with COPPA regulations, please ensure you are using v1.2.2 of the Adapter.
+
+**Changelog v1.2.2:**
+
+1.Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
+
+**Changelog v1.2.1:**
 
 1.Support Max v13.0.0
 
 
-**Changle Log v1.1.7:**
+**Changelog v1.1.7:**
 
 1.Support Max v12.5.0
 
-
-
-**Changle Log v1.1.3:**
+**Changelog v1.1.3:**
 
 1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
 
@@ -62,7 +66,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.1'
+    api 'io.github.alex-only:max_adapter:1.2.2'
 }
 ```
 
@@ -101,7 +105,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:13.0.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.1"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.2"/>
         
     </androidPackages>
 </dependencies>

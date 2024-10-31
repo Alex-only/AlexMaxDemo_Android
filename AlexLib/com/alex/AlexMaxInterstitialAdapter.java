@@ -81,7 +81,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
             @Override
             public void onFail(String errorMsg) {
-
+                notifyATLoadFail("", "Max: " + errorMsg);
             }
         });
     }
