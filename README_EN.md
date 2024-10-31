@@ -33,7 +33,7 @@
 
 ## Step 1. Integrate TopOn SDK
 
-Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.3.52 and above**
+Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.4.17 and above**
 
 
 
