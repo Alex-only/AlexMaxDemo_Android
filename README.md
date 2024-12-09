@@ -1,4 +1,8 @@
-**温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2版本的Adapter
+**温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+
+**v1.2.3版本更新说明:**
+
+支持Max v13.0.1。
 
 **v1.2.2版本更新说明:**
 
@@ -8,12 +12,9 @@
 
 支持Max v13.0.0
 
-
 **v1.1.7版本更新说明:**
 
 支持Max v12.5.0
-
-
 
 **v1.1.3版本更新说明:**
 
@@ -37,7 +38,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 ## 一. 接入TopOn SDK
 
-请从TopOn后台下载接入SDK，建议接入**TopOn v6.4.17及以上版本**。
+请从TopOn后台下载接入SDK，建议接入**TopOn v6.4.19及以上版本**。
 
 **注意**：在调用new ATRewardVideoAd()、new ATInterstitial()、new ATBannerView()时，**必须传入Activity**，否则Max广告将请求失败
 
@@ -53,7 +54,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 ```java
 dependencies {
     //Max SDK
-    api 'com.applovin:applovin-sdk:13.0.0'
+    api 'com.applovin:applovin-sdk:13.0.1'
 }
 ```
 
@@ -72,7 +73,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.2'
+    api 'io.github.alex-only:max_adapter:1.2.3'
 }
 ```
 
@@ -110,8 +111,8 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.0.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.2"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.0.1"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.3"/>
         
     </androidPackages>
 </dependencies>

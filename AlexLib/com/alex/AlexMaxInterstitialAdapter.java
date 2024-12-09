@@ -108,6 +108,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding) {
         mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId, appLovinSdk, context);
+        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxInterstitialAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }

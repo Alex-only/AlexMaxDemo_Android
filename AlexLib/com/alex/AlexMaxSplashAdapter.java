@@ -81,6 +81,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     private void startLoadAd(AppLovinSdk appLovinSdk, final boolean isBidding) {
 
         mMaxAppOpenAd = new MaxAppOpenAd(mAdUnitId, appLovinSdk);
+        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxAppOpenAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }

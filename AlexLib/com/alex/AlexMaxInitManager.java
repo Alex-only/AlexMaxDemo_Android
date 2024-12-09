@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.CountDownTimer;
 import android.os.HandlerThread;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.anythink.core.api.ATAdapterLogUtil;
 import com.anythink.core.api.ATInitMediation;
@@ -546,5 +547,84 @@ public class AlexMaxInitManager extends ATInitMediation {
             }
         }
     }
+
+
+    public synchronized void handleAutoLoad(String adUnitId, String customExt) {
+        if (TextUtils.isEmpty(adUnitId)) {
+            return;
+        }
+
+        AppLovinSdk applovinSdk = getApplovinSdk();
+        AppLovinSdkSettings settings = null;
+        if (applovinSdk == null || (settings = applovinSdk.getSettings()) == null) {
+            printLog(TAG, "disableAutoLoad: settings is null, do nothing!!!");
+            return;
+        }
+
+        if (TextUtils.isEmpty(customExt)) {
+            printLog(TAG, "disableAutoLoad: " + adUnitId + ", customExt is empty, open auto load");
+            handleDisableAdUnitIds(adUnitId, settings, 1);
+            return;
+        }
+
+
+        try {
+            JSONObject jsonObject = new JSONObject(customExt);
+            int autoLoadSw = jsonObject.optInt("auto_load_sw", 1);//1: on, 2:off
+
+            handleDisableAdUnitIds(adUnitId, settings, autoLoadSw);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleDisableAdUnitIds(String adUnitId, AppLovinSdkSettings settings, int autoLoadSw) {
+        List<String> disableList = new ArrayList<>();
+
+        String key = "disable_b2b_ad_unit_ids";
+        Map<String, String> extraParameters = settings.getExtraParameters();
+        String disableAdUnitIds = extraParameters != null ? extraParameters.get(key) : "";
+        printLog(TAG, "disableAutoLoad: origin disableAdUnitIds=" + disableAdUnitIds);
+        if (!TextUtils.isEmpty(disableAdUnitIds)) {
+            String[] split = disableAdUnitIds.split(",");
+            if (split != null) {
+                for (String s : split) {
+                    disableList.add(s);
+                }
+            }
+        }
+
+        if (autoLoadSw == 1) {//on
+            printLog(TAG, "disableAutoLoad: remove id, because switch is on: " + adUnitId);
+            disableList.remove(adUnitId);
+        } else if (autoLoadSw == 2) {//off
+            if (!disableList.contains(adUnitId)) {
+                printLog(TAG, "disableAutoLoad: add id, because switch is off: " + adUnitId);
+                disableList.add(adUnitId);
+            }
+        }
+
+        //update disableAdUnitIds
+        if (disableList.isEmpty()) {
+            disableAdUnitIds = "";
+        } else {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String unitId : disableList) {
+                stringBuilder.append(",").append(unitId);
+            }
+
+            disableAdUnitIds = stringBuilder.substring(1);
+        }
+
+        printLog(TAG, "disableAutoLoad: final disableAdUnitIds=" + disableAdUnitIds);
+        settings.setExtraParameter(key, disableAdUnitIds);
+    }
+
+    private void printLog(String TAG, String msg) {
+        if (ATSDK.isNetworkLogDebug()) {
+            Log.e(TAG, msg);
+        }
+    }
+
 
 }

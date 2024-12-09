@@ -81,6 +81,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
 
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding, Map<String, Object> localExtras) {
         nativeAdLoader = new MaxNativeAdLoader(mAdUnitId, appLovinSdk, context);
+        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             nativeAdLoader.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }

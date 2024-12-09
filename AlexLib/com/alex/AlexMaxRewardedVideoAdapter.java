@@ -122,6 +122,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
     private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBiddingRequest) {
 
         mMaxRewardedAd = AlexMaxRewardAd.getInstance(context, appLovinSdk, mAdUnitId);
+        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxRewardedAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
         }
