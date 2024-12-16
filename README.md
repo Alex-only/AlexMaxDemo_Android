@@ -1,3 +1,37 @@
+**Notes:** Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
+
+**Changelog v1.2.3:**
+
+1.Supports Max v13.0.1.
+
+**Changelog v1.2.2:**
+
+1.Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
+
+**Changelog v1.2.1:**
+
+1.Support Max v13.0.0
+
+
+**Changelog v1.1.7:**
+
+1.Support Max v12.5.0
+
+**Changelog v1.1.3:**
+
+1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
+
+2.Self-rendering ads must enter the relevant View settings into ATNativePrepareInfo. The following must be set:
+
+| API                                  | **Note**                   |
+| ------------------------------------ | -------------------------- |
+| setTitleView(View titleView)         | Bind Title View            |
+| setIconView(View iconView)           | Bind App Icon View         |
+| setMainImageView(View mainImageView) | Bind the main image View   |
+| setDescView(View descView)           | Bind description View      |
+| setCtaView(View ctaView)             | Bind call to action button |
+
+
 # Integration instructions
 
 ## Step 1. Integrate TopOn SDK
