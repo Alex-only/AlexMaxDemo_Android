@@ -52,7 +52,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
             AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
             AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
             if (appLovinSdk != null) {
-                appLovinSdk.getSettings().setUserIdentifier(mUserId);
+                appLovinSdk.setUserIdentifier(mUserId);
             }
             if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof AlexMaxRewardAd && ((AlexMaxRewardAd) alexMaxBiddingInfo.adObject).isReady()) {
                 mMaxRewardedAd = (AlexMaxRewardAd) alexMaxBiddingInfo.adObject;
@@ -85,7 +85,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
             @Override
             public void onSuccess() {
                 AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
-                appLovinSdk.getSettings().setUserIdentifier(mUserId);
+                appLovinSdk.setUserIdentifier(mUserId);
 
                 startLoadAd(context, appLovinSdk, false);
             }

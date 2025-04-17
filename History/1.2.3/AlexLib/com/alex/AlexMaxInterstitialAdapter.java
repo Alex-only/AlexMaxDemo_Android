@@ -3,33 +3,30 @@ package com.alex;
 import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
-import android.view.ViewGroup;
+import android.util.Log;
 
 import com.anythink.core.api.ATAdConst;
-import com.anythink.core.api.ATBaseAdAdapter;
 import com.anythink.core.api.ATBiddingListener;
 import com.anythink.core.api.ATBiddingResult;
-import com.anythink.core.api.ErrorCode;
 import com.anythink.core.api.MediationInitCallback;
-import com.anythink.splashad.unitgroup.api.CustomSplashAdapter;
+import com.anythink.interstitial.unitgroup.api.CustomInterstitialAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
-import com.applovin.mediation.ads.MaxAppOpenAd;
+import com.applovin.mediation.ads.MaxInterstitialAd;
 import com.applovin.sdk.AppLovinSdk;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class AlexMaxSplashAdapter extends CustomSplashAdapter {
+public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
 
-    static final String TAG = AlexMaxSplashAdapter.class.getSimpleName();
+    static final String TAG = AlexMaxInterstitialAdapter.class.getSimpleName();
 
     String mAdUnitId;
     String mSdkKey;
-    String mPayload;
+    MaxInterstitialAd mMaxInterstitialAd;
 
-    private MaxAppOpenAd mMaxAppOpenAd;
+    String mPayload;
 
     Map<String, Object> mExtraMap;
 
@@ -38,14 +35,25 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     double dynamicPrice;
 
     @Override
-    public void loadCustomNetworkAd(Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra) {
+    public void show(Activity activity) {
+        try {
+            if (mMaxInterstitialAd != null) {
+                mMaxInterstitialAd.showAd(activity);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loadCustomNetworkAd(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra) {
         initRequestParams(serverExtra);
 
         //Bidding Request
 //        if (!TextUtils.isEmpty(mPayload)) {
 //            AlexMaxBiddingInfo alexMaxBiddingInfo = AlexMaxInitManager.getInstance().requestC2SOffer(mAdUnitId, mPayload);
-//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxAppOpenAd && ((MaxAppOpenAd) alexMaxBiddingInfo.adObject).isReady()) {
-//                mMaxAppOpenAd = (MaxAppOpenAd) alexMaxBiddingInfo.adObject;
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
+//                mMaxInterstitialAd = (MaxInterstitialAd) alexMaxBiddingInfo.adObject;
 //                registerListener(false);
 //                if (mLoadListener != null) {
 //                    mLoadListener.onAdCacheLoaded();
@@ -68,9 +76,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
-
-                startLoadAd(appLovinSdk, false);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), false);
             }
 
             @Override
@@ -80,21 +86,40 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         });
     }
 
-    private void startLoadAd(AppLovinSdk appLovinSdk, final boolean isBidding) {
-
-        mMaxAppOpenAd = new MaxAppOpenAd(mAdUnitId, appLovinSdk);
-        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
-        if (isDynamicePrice) {
-            mMaxAppOpenAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
+    private void initRequestParams(Map<String, Object> serverExtra) {
+        mSdkKey = "";
+        mAdUnitId = "";
+        if (serverExtra.containsKey("sdk_key")) {
+            mSdkKey = (String) serverExtra.get("sdk_key");
+        }
+        if (serverExtra.containsKey("unit_id")) {
+            mAdUnitId = (String) serverExtra.get("unit_id");
+        }
+        if (serverExtra.containsKey("payload")) {
+            mPayload = serverExtra.get("payload").toString();
         }
 
+        double maxPriceValue = AlexMaxConst.getMaxPriceValue(serverExtra);
+        if (maxPriceValue != -1) {
+            isDynamicePrice = true;
+            dynamicPrice = maxPriceValue;
+        }
+    }
+
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding) {
+        mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId, appLovinSdk, context);
+        AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
+        if (isDynamicePrice) {
+            mMaxInterstitialAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
+        }
         registerListener(isBidding);
 
-        mMaxAppOpenAd.loadAd();
+        mMaxInterstitialAd.loadAd();
     }
 
     private void registerListener(final boolean isBidding) {
-        mMaxAppOpenAd.setListener(new MaxAdListener() {
+        mMaxInterstitialAd.setListener(new MaxAdListener() {
+
             @Override
             public void onAdLoaded(final MaxAd maxAd) {
                 if (mExtraMap == null) {
@@ -116,126 +141,59 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
                         }
                     });
                 }
+
             }
 
             @Override
             public void onAdDisplayed(MaxAd maxAd) {
                 mExtraMap = AlexMaxInitManager.getInstance().handleMaxAd(maxAd);
-                if (mImpressionListener != null) {
-                    mImpressionListener.onSplashAdShow();
+                if (mImpressListener != null) {
+                    mImpressListener.onInterstitialAdShow();
                 }
             }
 
             @Override
             public void onAdHidden(MaxAd maxAd) {
-                if (mImpressionListener != null) {
-                    mImpressionListener.onSplashAdDismiss();
+                if (mImpressListener != null) {
+                    mImpressListener.onInterstitialAdClose();
                 }
             }
 
             @Override
             public void onAdClicked(MaxAd maxAd) {
-                if (mImpressionListener != null) {
-                    mImpressionListener.onSplashAdClicked();
+                if (mImpressListener != null) {
+                    mImpressListener.onInterstitialAdClicked();
                 }
             }
 
             @Override
             public void onAdLoadFailed(String s, MaxError maxError) {
-                notifyATLoadFail(maxError.getCode() + "", maxError.getMessage());
+                if (!isBidding) {
+                    if (mLoadListener != null) {
+                        mLoadListener.onAdLoadError(maxError.getCode() + "", maxError.getMessage());
+                    }
+                } else {
+                    if (mBiddingListener != null) {
+                        mBiddingListener.onC2SBidResult(ATBiddingResult.fail("Max: error code:" + maxError.getCode() + " | error msg:" + maxError.getMessage()));
+                        mBiddingListener = null;
+                    }
+                }
             }
 
             @Override
             public void onAdDisplayFailed(MaxAd maxAd, MaxError maxError) {
-                if (mImpressionListener != null) {
-                    mDismissType = ATAdConst.DISMISS_TYPE.SHOWFAILED;
-                    mImpressionListener.onSplashAdShowFail(ErrorCode.getErrorCode(ErrorCode.adShowError, maxError.getCode() + "", maxError.getMessage()));
-                    mImpressionListener.onSplashAdDismiss();
-                }
+                mDismissType = ATAdConst.DISMISS_TYPE.SHOWFAILED;
+                Log.e(TAG, "onAdDisplayFailed: errorCode: " + maxError.getCode() + ",errorMessage: " + maxError.getMessage());
             }
         });
     }
-
-    @Override
-    public boolean isAdReady() {
-        return mMaxAppOpenAd != null && mMaxAppOpenAd.isReady();
-    }
-
-    @Override
-    public void show(Activity activity, ViewGroup container) {
-        mMaxAppOpenAd.showAd();
-    }
-
-
-    private void initRequestParams(Map<String, Object> serverExtra) {
-        mSdkKey = "";
-        mAdUnitId = "";
-
-        if (serverExtra.containsKey("sdk_key")) {
-            mSdkKey = (String) serverExtra.get("sdk_key");
-        }
-        if (serverExtra.containsKey("unit_id")) {
-            mAdUnitId = (String) serverExtra.get("unit_id");
-        }
-        if (serverExtra.containsKey("payload")) {
-            mPayload = serverExtra.get("payload").toString();
-        }
-
-        double maxPriceValue = AlexMaxConst.getMaxPriceValue(serverExtra);
-        if (maxPriceValue != -1) {
-            isDynamicePrice = true;
-            dynamicPrice = maxPriceValue;
-        }
-    }
-
-    @Override
-    public boolean startBiddingRequest(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
-        initRequestParams(serverExtra);
-        this.mBiddingListener = biddingListener;
-
-        AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
-            @Override
-            public void onSuccess() {
-//                if (checkBiddingCache()) return;
-                startLoadAd(AlexMaxInitManager.getInstance().getApplovinSdk(), true);
-            }
-
-            @Override
-            public void onFail(String errorMsg) {
-                if (mBiddingListener != null) {
-                    ATBiddingResult biddingResult = ATBiddingResult.fail("Max: " + errorMsg);
-                    mBiddingListener.onC2SBidResult(biddingResult);
-                    mBiddingListener = null;
-                }
-            }
-        });
-        return true;
-    }
-
-//    private boolean checkBiddingCache() {
-//        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
-//        if (cacheEntry != null) {
-//            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
-//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxAppOpenAd && ((MaxAppOpenAd) alexMaxBiddingInfo.adObject).isReady()) {
-//                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
-//                String cacheId = cacheEntry.getKey();
-//                if (mBiddingListener != null) {
-//                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
-//                    mBiddingListener = null;
-//                }
-//                return true;
-//            }
-//
-//        }
-//
-//        return false;
-//    }
 
     @Override
     public void destory() {
-        if (mMaxAppOpenAd != null) {
-            mMaxAppOpenAd.destroy();
-            mMaxAppOpenAd = null;
+        if (mMaxInterstitialAd != null) {
+            mMaxInterstitialAd.setListener(null);
+            mMaxInterstitialAd.destroy();
+            mMaxInterstitialAd = null;
         }
     }
 
@@ -255,6 +213,60 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     }
 
     @Override
+    public boolean isAdReady() {
+        if (mMaxInterstitialAd != null) {
+            return mMaxInterstitialAd.isReady();
+        }
+        return false;
+    }
+
+
+    ATBiddingListener mBiddingListener;
+
+    @Override
+    public boolean startBiddingRequest(final Context context, Map<String, Object> serverExtra, Map<String, Object> localExtra, ATBiddingListener biddingListener) {
+        initRequestParams(serverExtra);
+        this.mBiddingListener = biddingListener;
+
+        AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
+            @Override
+            public void onSuccess() {
+//                if (checkBiddingCache()) return;
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
+            }
+
+            @Override
+            public void onFail(String errorMsg) {
+                if (mBiddingListener != null) {
+                    ATBiddingResult biddingResult = ATBiddingResult.fail("Max: " + errorMsg);
+                    mBiddingListener.onC2SBidResult(biddingResult);
+                    mBiddingListener = null;
+                }
+            }
+        });
+        return true;
+    }
+
+//    private boolean checkBiddingCache() {
+//        Map.Entry<String, AlexMaxBiddingInfo> cacheEntry = AlexMaxInitManager.getInstance().checkC2SCacheOffer(mAdUnitId);
+//        if (cacheEntry != null) {
+//            AlexMaxBiddingInfo alexMaxBiddingInfo = cacheEntry.getValue();
+//            if (alexMaxBiddingInfo != null && alexMaxBiddingInfo.adObject instanceof MaxInterstitialAd && ((MaxInterstitialAd) alexMaxBiddingInfo.adObject).isReady()) {
+//                MaxAd maxAd = alexMaxBiddingInfo.maxAd;
+//                String cacheId = cacheEntry.getKey();
+//                if (mBiddingListener != null) {
+//                    mBiddingListener.onC2SBidResult(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), cacheId, null));
+//                    mBiddingListener = null;
+//                }
+//                return true;
+//            }
+//
+//        }
+//
+//        return false;
+//    }
+
+    @Override
     public Map<String, Object> getNetworkInfoMap() {
         return mExtraMap;
     }
@@ -262,12 +274,5 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     @Override
     public boolean setUserDataConsent(Context context, boolean isConsent, boolean isEUTraffic) {
         return AlexMaxInitManager.getInstance().setUserDataConsent(context, isConsent, isEUTraffic);
-    }
-
-    @Override
-    public Map<Integer, Class<? extends ATBaseAdAdapter>> getFormatAdapterMap() {
-        Map<Integer, Class<? extends ATBaseAdAdapter>> formatAdapterMap = new HashMap<>();
-        formatAdapterMap.put(NATIVE_FORMAT, AlexMaxNativeAdapter.class);
-        return formatAdapterMap;
     }
 }

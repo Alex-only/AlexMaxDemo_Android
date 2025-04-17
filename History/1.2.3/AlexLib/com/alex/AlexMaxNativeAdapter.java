@@ -99,7 +99,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
                             if (mBiddingListener != null) {
                                 String token = AlexMaxInitManager.getInstance().getToken();
                                 mBiddingListener.onC2SBiddingResultWithCache(ATBiddingResult.success(AlexMaxInitManager.getInstance().getMaxAdEcpm(maxAd), token, null), customNativeAd);
-//                                mBiddingListener = null;
+                                mBiddingListener = null;
                             }
                         }
                     });
@@ -142,8 +142,8 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             public void onFail(String errorMsg) {
                 if (mBiddingListener != null) {
                     ATBiddingResult biddingResult = ATBiddingResult.fail("Max: " + errorMsg);
-                    mBiddingListener.onC2SBiddingResultWithCache(biddingResult, null);
-//                    mBiddingListener = null;
+                    mBiddingListener.onC2SBidResult(biddingResult);
+                    mBiddingListener = null;
                 }
             }
         });

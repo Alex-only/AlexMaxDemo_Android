@@ -150,9 +150,6 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
         } else { //Banner
             mMaxAdView = new MaxAdView(mAdUnitId, appLovinSdk, ((Activity) context));
         }
-
-        mMaxAdView.setExtraParameter("allow_pause_auto_refresh_immediately", "true");
-
         AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxAdView.setExtraParameter("disable_precache", "true");

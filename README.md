@@ -1,35 +1,14 @@
-**Notes:** Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
+> 💡 **Tips**
+> - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
-**Changelog v1.2.3:**
+> Changelog
+> - v1.2.5: Supports Max v13.2.0
+> - v1.2.3: Supports Max v13.0.1
+> - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
+> - v1.2.1: Support Max v13.0.0
+> - v1.1.7: Support Max v12.5.0
 
-1.Supports Max v13.0.1.
-
-**Changelog v1.2.2:**
-
-1.Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
-
-**Changelog v1.2.1:**
-
-1.Support Max v13.0.0
-
-
-**Changelog v1.1.7:**
-
-1.Support Max v12.5.0
-
-**Changelog v1.1.3:**
-
-1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
-
-2.Self-rendering ads must enter the relevant View settings into ATNativePrepareInfo. The following must be set:
-
-| API                                  | **Note**                   |
-| ------------------------------------ | -------------------------- |
-| setTitleView(View titleView)         | Bind Title View            |
-| setIconView(View iconView)           | Bind App Icon View         |
-| setMainImageView(View mainImageView) | Bind the main image View   |
-| setDescView(View descView)           | Bind description View      |
-| setCtaView(View ctaView)             | Bind call to action button |
+---
 
 
 # Integration instructions
@@ -38,7 +17,7 @@
 
 Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.4.19 and above**
 
-
+---
 
 ## Step 2. Introducing Max SDK&Alex Adapter
 
@@ -56,7 +35,7 @@ dependencies {
 
 #### 2. Import Alex Adapter
 
-**Note:** You can choose one of the following methods:
+**⚠️ Note:** You can choose one of the following methods:
 
 2.1 Gradle (Recommand):
 
@@ -96,7 +75,7 @@ dependencies {
 }
 ```
 
-
+---
 
 ### Unity
 
@@ -114,12 +93,11 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 </dependencies>
 ```
 
-
+---
 
 ## Step 3. Max integrates with other advertising platforms
 
-<font color='red'>If you do not need to access other advertising platforms through Max, you can skip this part.</font>
-
+<font color='red'>⚠️ If you do not need to access other advertising platforms through Max, you can skip this part.</font>
 
 
 ### 1. Determine the advertising platform Adapter version
@@ -130,7 +108,7 @@ Take access to Admob as an example:
 
 1.2 Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.10.1) and Admob version (v22.3.0), find the corresponding Adapter version (that is, v22.3.0.0)
 
-**Note:**
+**⚠️ Note:**
 
 (1) If you cannot find the Adapter corresponding to Admob v22.3.0, you can find the corresponding Adapter version by viewing the Changelog of the Adapter
 
@@ -191,7 +169,7 @@ public class MainActivity extends Activity
 
 ![img](img/max_mediation_debugger.png)
 
-
+---
 
 ## Step 4. TopOn background configuration
 
@@ -245,14 +223,13 @@ The JSON configuration example when adding an ad source in the background is as 
 }
 ```
 
-
+---
 
 ## Step 5. Max setting
 
 ### 1. Create Max account
 
 Log in to the [MAX](https://dash.applovin.com/o/mediation) official website to apply for an account
-
 
 
 ### 2. Create MAX app and ad unit
@@ -262,11 +239,9 @@ Create app and ad unit in MAX-->Manage-->Ad Units
 ![](img/max_1.png)
 
 
-
 ### 3. Complete Network information configuration in MAX
 
 ![](img/max_2.png)
-
 
 
 ### 4. MAX Advertisement Description
@@ -283,7 +258,6 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 | Native (Small、Medium) | Native - template render |
 
 
-
 ### 5. Configure MAX unit
 
 #### 5.1 Configure the unit of MAX
@@ -293,17 +267,15 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 ![](img/max_3.png)
 
 
-
 5.1.2. Configure MAX parameters in the TopOn
 
 1) Add an ad source, log in to the TopOn → Mediation → Add ad source
 
-
+---
 
 ## Step 6. Test Max ads
 
-<font color='red'>Please make sure you have followed the instructions above to create applications and advertising placement in the Max backend and configure them under the advertising placement in the TopOn backend.</font>
-
+<font color='red'>⚠️ Please make sure you have followed the instructions above to create applications and advertising placement in the Max backend and configure them under the advertising placement in the TopOn backend.</font>
 
 
 ### 1. Open the log of TopOn SDK
@@ -322,8 +294,6 @@ anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ********
 anythink: ********************************** UA_6.x.xx *************************************
 ```
 
-
-
 ### 2. Open Max's test mode
 
 Enter the [MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes) page, click the `Add Test Device` button, and fill in the GAID obtained above in the input box of IDFA (iOS) or GAID (Android), then select the advertising platform that needs to be tested, and click `Save` to save it.
@@ -331,7 +301,6 @@ Enter the [MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes) pa
 ![](img/max_test_mode.png)
 
 > For more information, please refer to [MAX Test Mode](https://dash.applovin.com/documentation/mediation/android/testing-networks/test-mode)
-
 
 
 ### 3. Load & display ads

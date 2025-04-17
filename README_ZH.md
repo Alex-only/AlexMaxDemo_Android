@@ -1,40 +1,18 @@
-**温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+> **温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+>
+> - **v1.2.5版本更新说明:** 支持Max v13.2.0
+>
+> - **v1.2.3版本更新说明:** 支持Max v13.0.1
+>
+> - **v1.2.2版本更新说明:** 支持Max v13.0.0, [对于儿童用户，不会初始化Max SDK](https://developers.applovin.com/en/max/android/overview/privacy/#children)
+>
+> - **v1.2.1版本更新说明:** 支持Max v13.0.0
+>
+> - **v1.1.7版本更新说明:** 支持Max v12.5.0
 
-**v1.2.3版本更新说明:**
-
-支持Max v13.0.1。
-
-**v1.2.2版本更新说明:**
-
-支持Max v13.0.0。[对于儿童用户，不会初始化Max SDK。](https://developers.applovin.com/en/max/android/overview/privacy/#children)
-
-**v1.2.1版本更新说明:**
-
-支持Max v13.0.0
-
-**v1.1.7版本更新说明:**
-
-支持Max v12.5.0
-
-**v1.1.3版本更新说明:**
-
-1.支持Max的自渲染广告接入，目前能适配Applovin，Admob（com.applovin.mediation:google-adapter版本必须是v22.1.0.1以上）的接入
-
-2.自渲染广告必须将相关的View设置进入ATNativePrepareInfo里面，以下是必须设置的：
-
-| API                                  | 说明              |
-| ------------------------------------ | ----------------- |
-| setTitleView(View titleView)         | 绑定标题View      |
-| setIconView(View iconView)           | 绑定应用图标 View |
-| setMainImageView(View mainImageView) | 绑定大图View      |
-| setDescView(View descView)           | 绑定描述View      |
-| setCtaView(View ctaView)             | 绑定CTA按钮View   |
-
-
+---
 
 # 集成
-
-Tip: If necessary, please refer to [the English documentation](https://github.com/Alex-only/AlexMaxDemo_Android/blob/main/README_EN.md)
 
 ## 一. 接入TopOn SDK
 
@@ -42,6 +20,7 @@ Tip: If necessary, please refer to [the English documentation](https://github.co
 
 **注意**：在调用new ATRewardVideoAd()、new ATInterstitial()、new ATBannerView()时，**必须传入Activity**，否则Max广告将请求失败
 
+---
 
 ## 二. 引入Max SDK&Alex Adapter
 
@@ -100,7 +79,7 @@ dependencies {
 }
 ```
 
-
+---
 
 ### Unity
 
@@ -118,17 +97,15 @@ dependencies {
 </dependencies>
 ```
 
-
+---
 
 ## 三. Max接入其他广告平台
 
-<font color='red'>如果不需要通过Max接入其他广告平台，可跳过此部分内容。</font>
-
-
+<font color='red'>⚠️ 如果不需要通过Max接入其他广告平台，可跳过此部分内容</font>
 
 ### 1. 确定广告平台Adapter版本
 
-以接入Admob为例：
+⚠️ 以接入Admob为例：
 
 1.1 先到TopOn后台，查看接入的TopOn版本兼容的Admob版本是多少？（TopOn v6.2.72版本兼容的Admob版本为v22.3.0）
 
@@ -195,7 +172,7 @@ public class MainActivity extends Activity
 
 ![img](img/max_mediation_debugger.png)
 
-
+---
 
 ## 四. TopOn后台配置
 
@@ -249,14 +226,13 @@ public class MainActivity extends Activity
 }
 ```
 
-
+---
 
 ## 五. Max后台配置
 
 ### Step1.创建MAX帐号
 
 登录[MAX官网](https://dash.applovin.com/o/mediation)申请开通账号
-
 
 
 ### Step2.创建MAX的应用和广告单元
@@ -302,12 +278,11 @@ MAX的Unit跟TopOn的广告类型对应关系如下：
 
 添加广告源，登录TopOn后台→广告平台→变现平台→广告源管理（Max）→添加广告源
 
-
+---
 
 ## 六、测试Max广告
 
-<font color='red'>请确保已经按照上方说明，已经在Max后台创建好应用和广告位，并将其配置到TopOn后台的广告位下</font>
-
+<font color='red'>⚠️请确保已经按照上方说明，已经在Max后台创建好应用和广告位，并将其配置到TopOn后台的广告位下</font>
 
 
 ### 1. 打开TopOn SDK的日志
@@ -326,8 +301,6 @@ anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ********
 anythink: ********************************** UA_6.x.xx *************************************
 ```
 
-
-
 ### 2. 打开Max的测试模式
 
 进入[MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes)页面，点击`Add Test Device`按钮，在IDFA (iOS) or GAID (Android)的输入框中填入上面获取到的GAID，然后选择需要进行测试的广告平台，点击`Save`进行保存。
@@ -337,40 +310,7 @@ anythink: ********************************** UA_6.x.xx *************************
 > 更多信息，请参考 [MAX Test Mode](https://dash.applovin.com/documentation/mediation/android/testing-networks/test-mode)
 
 
-
 ### 3. 加载&展示广告
 
 在Max后台添加测试设备后，请等待5~10分钟，待配置生效后，调用TopOn SDK的相关方法进行TopOn广告位的加载&展示，验证Max广告的集成是否正常
-
-**Notes:** Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
-
-**Changelog v1.2.3:**
-
-1.Supports Max v13.0.1.
-
-**Changelog v1.2.2:**
-
-1.Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
-
-**Changelog v1.2.1:**
-
-1.Support Max v13.0.0
-
-
-**Changelog v1.1.7:**
-
-1.Support Max v12.5.0
-
-**Changelog v1.1.3:**
-
-1.Supports Max’s self-rendering ad, and currently compatible with Applovin, Admob  ("com.applovin.mediation:google-adapter" must be v22.1.0.1 or above).
-
-2.Self-rendering ads must enter the relevant View settings into ATNativePrepareInfo. The following must be set:
-
-| API                                  | **Note**                   |
-| ------------------------------------ | -------------------------- |
-| setTitleView(View titleView)         | Bind Title View            |
-| setIconView(View iconView)           | Bind App Icon View         |
-| setMainImageView(View mainImageView) | Bind the main image View   |
-| setDescView(View descView)           | Bind description View      |
-| setCtaView(View ctaView)             | Bind call to action button |
+````

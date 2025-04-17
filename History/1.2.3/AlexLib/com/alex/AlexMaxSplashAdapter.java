@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.anythink.core.api.ATAdConst;
-import com.anythink.core.api.ATBaseAdAdapter;
 import com.anythink.core.api.ATBiddingListener;
 import com.anythink.core.api.ATBiddingResult;
 import com.anythink.core.api.ErrorCode;
@@ -18,7 +17,6 @@ import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAppOpenAd;
 import com.applovin.sdk.AppLovinSdk;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class AlexMaxSplashAdapter extends CustomSplashAdapter {
@@ -262,12 +260,5 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     @Override
     public boolean setUserDataConsent(Context context, boolean isConsent, boolean isEUTraffic) {
         return AlexMaxInitManager.getInstance().setUserDataConsent(context, isConsent, isEUTraffic);
-    }
-
-    @Override
-    public Map<Integer, Class<? extends ATBaseAdAdapter>> getFormatAdapterMap() {
-        Map<Integer, Class<? extends ATBaseAdAdapter>> formatAdapterMap = new HashMap<>();
-        formatAdapterMap.put(NATIVE_FORMAT, AlexMaxNativeAdapter.class);
-        return formatAdapterMap;
     }
 }

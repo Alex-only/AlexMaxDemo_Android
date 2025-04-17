@@ -207,7 +207,7 @@ public class AlexMaxInitManager extends ATInitMediation {
         mIsLoading.set(true);
 
         // Create the initialization configuration
-        AppLovinSdkInitializationConfiguration initConfig = new AppLovinSdkInitializationConfigurationImpl.BuilderImpl( sdkKey )
+        AppLovinSdkInitializationConfiguration initConfig = new AppLovinSdkInitializationConfigurationImpl.BuilderImpl( sdkKey, context )
                 .setMediationProvider( AppLovinMediationProvider.MAX )
                 // Perform any additional configuration/setting changes
                 .build();
