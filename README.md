@@ -29,7 +29,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:13.0.1'
+    api 'com.applovin:applovin-sdk:13.2.0'
 }
 ```
 
@@ -48,7 +48,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.3'
+    api 'io.github.alex-only:max_adapter:1.2.5'
 }
 ```
 
@@ -86,8 +86,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.0.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.3"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.2.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.5"/>
         
     </androidPackages>
 </dependencies>
