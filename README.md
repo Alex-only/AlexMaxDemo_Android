@@ -2,8 +2,8 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
-> - v1.2.5: Supports Max v13.2.0
-> - v1.2.3: Supports Max v13.0.1
+> - v1.2.5: The minimum supported MAX SDK version 13.2.0
+> - v1.2.3: The maximum supported MAX SDK version 13.1.0
 > - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
 > - v1.2.1: Support Max v13.0.0
 > - v1.1.7: Support Max v12.5.0

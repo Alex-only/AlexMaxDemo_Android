@@ -1,8 +1,8 @@
 > **温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
 >
-> - **v1.2.5版本更新说明:** 支持Max v13.2.0
+> - **v1.2.5版本更新说明:** 仅支持Max v13.2.0及以上
 >
-> - **v1.2.3版本更新说明:** 支持Max v13.0.1
+> - **v1.2.3版本更新说明:** 仅支持Max v13.1.0及以下
 >
 > - **v1.2.2版本更新说明:** 支持Max v13.0.0, [对于儿童用户，不会初始化Max SDK](https://developers.applovin.com/en/max/android/overview/privacy/#children)
 >
