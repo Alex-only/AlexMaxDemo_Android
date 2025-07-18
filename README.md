@@ -2,7 +2,8 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
-> - v1.2.5: The minimum supported MAX SDK version 13.2.0
+> - v1.2.6: The minimum supported MAX SDK version 13.3.0
+> - v1.2.5: Only supported MAX SDK version 13.2.0
 > - v1.2.3: The maximum supported MAX SDK version 13.1.0
 > - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
 > - v1.2.1: Support Max v13.0.0
@@ -29,7 +30,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:13.2.0'
+    api 'com.applovin:applovin-sdk:13.3.1'
 }
 ```
 
@@ -48,7 +49,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.5'
+    api 'io.github.alex-only:max_adapter:1.2.6'
 }
 ```
 
@@ -86,8 +87,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.2.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.5"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.3.1"/>
+        <androidPackage spec="io.github.alex-only:max_adapter:1.2.6"/>
         
     </androidPackages>
 </dependencies>

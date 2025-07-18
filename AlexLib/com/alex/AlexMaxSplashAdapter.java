@@ -16,7 +16,6 @@ import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAppOpenAd;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,9 +67,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
-
-                startLoadAd(appLovinSdk, false);
+                startLoadAd(false);
             }
 
             @Override
@@ -80,9 +77,9 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
         });
     }
 
-    private void startLoadAd(AppLovinSdk appLovinSdk, final boolean isBidding) {
+    private void startLoadAd(final boolean isBidding) {
 
-        mMaxAppOpenAd = new MaxAppOpenAd(mAdUnitId, appLovinSdk);
+        mMaxAppOpenAd = new MaxAppOpenAd(mAdUnitId);
         AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxAppOpenAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
@@ -197,7 +194,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
             @Override
             public void onSuccess() {
 //                if (checkBiddingCache()) return;
-                startLoadAd(AlexMaxInitManager.getInstance().getApplovinSdk(), true);
+                startLoadAd(true);
             }
 
             @Override

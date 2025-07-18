@@ -87,7 +87,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
                 AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
                 appLovinSdk.getSettings().setUserIdentifier(mUserId);
 
-                startLoadAd(false);
+                startLoadAd(context, appLovinSdk, false);
             }
 
             @Override
@@ -119,9 +119,9 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
     }
 
 
-    private void startLoadAd(final boolean isBiddingRequest) {
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBiddingRequest) {
 
-        mMaxRewardedAd = AlexMaxRewardAd.getInstance(mAdUnitId);
+        mMaxRewardedAd = AlexMaxRewardAd.getInstance(context, appLovinSdk, mAdUnitId);
         AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxRewardedAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
@@ -348,7 +348,7 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
             @Override
             public void onSuccess() {
                 if (checkBiddingCache()) return;
-                startLoadAd(true);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
             }
 
             @Override

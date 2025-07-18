@@ -1,18 +1,16 @@
 package com.alex;
 
 import android.content.Context;
-import android.os.Handler;
+import android.os.CountDownTimer;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.anythink.core.api.ATAdapterLogUtil;
 import com.anythink.core.api.ATInitMediation;
 import com.anythink.core.api.ATSDK;
 import com.anythink.core.api.MediationInitCallback;
+import com.applovin.impl.sdk.AppLovinSdkInitializationConfigurationImpl;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.sdk.AppLovinMediationProvider;
@@ -60,11 +58,6 @@ public class AlexMaxInitManager extends ATInitMediation {
     private Method getAppLovinSDKMethod;
     private Method setIsAgeRestrictedUserMethod;
 
-    private static final int MAX_CHECKS = 7;
-    private static final int MSG_CHECK = 0x001;
-    private int checkCount = 0;
-    private Handler backgroundHandler;
-    HandlerThread mHandlerThread;
 
     private AlexMaxInitManager() {
         initByATInitManagerState();
@@ -156,9 +149,9 @@ public class AlexMaxInitManager extends ATInitMediation {
         try {
             boolean ccpaSwitch = (boolean) serviceExtras.get("app_ccpa_switch");
             if (ccpaSwitch) {
-                AppLovinPrivacySettings.setDoNotSell(true);
+                AppLovinPrivacySettings.setDoNotSell(true, context);
             } else {
-                AppLovinPrivacySettings.setDoNotSell(false);
+                AppLovinPrivacySettings.setDoNotSell(false, context);
             }
         } catch (Throwable e) {
 
@@ -214,57 +207,62 @@ public class AlexMaxInitManager extends ATInitMediation {
         mIsLoading.set(true);
 
         // Create the initialization configuration
-        AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder( sdkKey )
+        AppLovinSdkInitializationConfiguration initConfig = new AppLovinSdkInitializationConfigurationImpl.BuilderImpl( sdkKey )
                 .setMediationProvider( AppLovinMediationProvider.MAX )
                 // Perform any additional configuration/setting changes
                 .build();
 
-        checkCount = 0;
-        mHandlerThread = new HandlerThread("alex_max_init");
-        mHandlerThread.start();
-        // 获取后台线程的 Looper，并创建 Handler
-        backgroundHandler = new Handler(mHandlerThread.getLooper()) {
+
+        final CountDownTimer[] countDownTimer = new CountDownTimer[1];
+        HandlerThread mHandlerThread = new HandlerThread("alex_max_init") {
             @Override
-            public void handleMessage(@NonNull Message msg) {
-                if (msg.what == MSG_CHECK) {
-                    // 在子线程执行检查操作
-                    if (mHasCallbackInit.get()) {
-                        ATAdapterLogUtil.i(TAG, "onTick: has callback init, return");
-                        return;
+            protected void onLooperPrepared() {
+                countDownTimer[0] = new CountDownTimer(5000, 1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        if (mHasCallbackInit.get()) {
+                            ATAdapterLogUtil.i(TAG, "onTick: has callback init, return");
+                            return;
+                        }
+
+                        if (appLovinSdk.isInitialized()) {
+                            ATAdapterLogUtil.i(TAG, "onTick: callback init");
+                            if (mHasCallbackInit.compareAndSet(false, true)) {
+                                mAppLovinSdk = appLovinSdk;
+                                mIsLoading.set(false);
+                                callbackResult("");
+                            }
+                        } else {
+                            ATAdapterLogUtil.i(TAG, "onTick: isInitialized = false");
+                        }
                     }
 
-                    if (appLovinSdk.isInitialized()) {
-                        ATAdapterLogUtil.i(TAG, "onTick: callback init");
+                    @Override
+                    public void onFinish() {
                         if (mHasCallbackInit.compareAndSet(false, true)) {
-                            mAppLovinSdk = appLovinSdk;
+                            ATAdapterLogUtil.e(TAG, "onFinish: callback timeout");
                             mIsLoading.set(false);
-                            callbackResult("");
-                        }
-                    } else {
-                        ATAdapterLogUtil.i(TAG, "onTick: isInitialized = false");
-                        // 增加计数并判断是否继续
-                        checkCount++;
-                        if (checkCount < MAX_CHECKS) {
-                            // 延迟1秒后再次发送检查消息
-                            sendEmptyMessageDelayed(MSG_CHECK, 1000);
-                        } else {
-                            // 检查完成
-                            if (mHasCallbackInit.compareAndSet(false, true)) {
-                                ATAdapterLogUtil.e(TAG, "onFinish: callback timeout");
-                                mIsLoading.set(false);
-                                callbackResult("init timeout");
-                            }
+                            callbackResult("init timeout");
                         }
                     }
-                }
+                };
+                countDownTimer[0].start();
             }
         };
-        // 发送第一条检查消息，启动循环
-        backgroundHandler.sendEmptyMessageDelayed(MSG_CHECK, 1000);
+        mHandlerThread.start();
 
         appLovinSdk.initialize(initConfig, new AppLovinSdk.SdkInitializationListener() {
             @Override
             public void onSdkInitialized(AppLovinSdkConfiguration appLovinSdkConfiguration) {
+                try {
+                    if (countDownTimer[0] != null) {
+                        countDownTimer[0].cancel();
+                    }
+
+                    mHandlerThread.quit();
+                } catch (Throwable e) {
+                }
+
                 if (mHasCallbackInit.compareAndSet(false, true)) {
                     mAppLovinSdk = appLovinSdk;
                     mIsLoading.set(false);
@@ -363,15 +361,6 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
     private void callbackResult(String errorMsg) {
-        try {
-            if (backgroundHandler != null) {
-                backgroundHandler.removeCallbacksAndMessages(null);
-            }
-            mHandlerThread.quitSafely();
-        } catch (Throwable ignored) {
-
-        }
-
         List<MediationInitCallback> Listeners;
         synchronized (mLock) {
             if (mListeners == null) {
@@ -411,11 +400,7 @@ public class AlexMaxInitManager extends ATInitMediation {
 
     @Override
     public boolean setUserDataConsent(Context context, boolean isConsent, boolean isEUTraffic) {
-        try {
-            AppLovinPrivacySettings.setHasUserConsent(isConsent);
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
+        AppLovinPrivacySettings.setHasUserConsent(isConsent, context);
         return true;
     }
 
@@ -525,7 +510,7 @@ public class AlexMaxInitManager extends ATInitMediation {
         }
     }
 
-    private Object getAppLovinInitManagerInstance() {
+    private Object getAppLovinInitManagerInstance(){
         if (initManagerInstance != null) {
             return initManagerInstance;
         }
@@ -542,7 +527,7 @@ public class AlexMaxInitManager extends ATInitMediation {
             //调用 getInstance 方法
             Object applovinInitManagerInstance = getInstanceAppLovinMethod.invoke(ttInitManagerObj);
             return applovinInitManagerInstance;
-        } catch (Throwable t) {
+        } catch (Throwable t){
             ATAdapterLogUtil.e(TAG, "initSDK", t);
         }
         return null;

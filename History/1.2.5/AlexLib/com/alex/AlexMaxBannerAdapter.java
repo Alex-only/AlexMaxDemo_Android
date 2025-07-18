@@ -18,6 +18,7 @@ import com.applovin.mediation.MaxAdFormat;
 import com.applovin.mediation.MaxAdViewAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAdView;
+import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkUtils;
 
 import java.util.Map;
@@ -86,7 +87,7 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
                             @Override
                             public void run() {
                                 try {
-                                    startLoadAd(context, localExtra, false);
+                                    startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), localExtra, false);
                                 } catch (Throwable e) {
                                     if (mLoadListener != null) {
                                         mLoadListener.onAdLoadError("", e.getMessage());
@@ -136,11 +137,18 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
 
     }
 
-    private void startLoadAd(Context context, Map<String, Object> localExtra, final boolean isBiddingRequest) {
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, Map<String, Object> localExtra, final boolean isBiddingRequest) {
+        if (!(context instanceof Activity)) {
+            if (mLoadListener != null) {
+                mLoadListener.onAdLoadError("", "Max: context must be activity");
+            }
+            return;
+        }
+
         if (TextUtils.equals("1", mUnitType)) { //MREC
-            mMaxAdView = new MaxAdView(mAdUnitId, MaxAdFormat.MREC);
+            mMaxAdView = new MaxAdView(mAdUnitId, MaxAdFormat.MREC, appLovinSdk, ((Activity) context));
         } else { //Banner
-            mMaxAdView = new MaxAdView(mAdUnitId);
+            mMaxAdView = new MaxAdView(mAdUnitId, appLovinSdk, ((Activity) context));
         }
 
         mMaxAdView.setExtraParameter("allow_pause_auto_refresh_immediately", "true");
@@ -343,7 +351,7 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
                 postOnMainThread(new Runnable() {
                     @Override
                     public void run() {
-                        startLoadAd(context, localExtra, true);
+                        startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), localExtra, true);
                     }
                 });
 

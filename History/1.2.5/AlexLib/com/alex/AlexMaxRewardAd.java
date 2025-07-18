@@ -1,12 +1,14 @@
 package com.alex;
 
 import android.app.Activity;
+import android.content.Context;
 
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.MaxReward;
 import com.applovin.mediation.MaxRewardedAdListener;
 import com.applovin.mediation.ads.MaxRewardedAd;
+import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,8 +24,8 @@ public class AlexMaxRewardAd {
 
     MaxAd mMaxAd;
 
-    private AlexMaxRewardAd(String adUnitId) {
-        maxRewardedAd = MaxRewardedAd.getInstance(adUnitId);
+    private AlexMaxRewardAd(Context context, AppLovinSdk appLovinSdk, String adUnitId) {
+        maxRewardedAd = MaxRewardedAd.getInstance(adUnitId, appLovinSdk, context);
         maxRewardedAdListener = new MaxRewardedAdListener() {
 
             @Override
@@ -101,14 +103,14 @@ public class AlexMaxRewardAd {
         maxRewardedAd.setListener(maxRewardedAdListener);
     }
 
-    public synchronized static AlexMaxRewardAd getInstance(String adUnitId) {
+    public synchronized static AlexMaxRewardAd getInstance(Context context, AppLovinSdk appLovinSdk, String adUnitId) {
         if (maxATRewardAdMap == null) {
             maxATRewardAdMap = new ConcurrentHashMap<>();
         }
 
         AlexMaxRewardAd alexMaxRewardAd = maxATRewardAdMap.get(adUnitId);
         if (alexMaxRewardAd == null) {
-            alexMaxRewardAd = new AlexMaxRewardAd(adUnitId);
+            alexMaxRewardAd = new AlexMaxRewardAd(context, appLovinSdk, adUnitId);
             maxATRewardAdMap.put(adUnitId, alexMaxRewardAd);
         }
         return alexMaxRewardAd;

@@ -14,6 +14,7 @@ import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxInterstitialAd;
+import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 
@@ -75,7 +76,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                startLoadAd(false);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), false);
             }
 
             @Override
@@ -105,8 +106,8 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
         }
     }
 
-    private void startLoadAd(final boolean isBidding) {
-        mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId);
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding) {
+        mMaxInterstitialAd = new MaxInterstitialAd(mAdUnitId, appLovinSdk, context);
         AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             mMaxInterstitialAd.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
@@ -231,7 +232,7 @@ public class AlexMaxInterstitialAdapter extends CustomInterstitialAdapter {
             @Override
             public void onSuccess() {
 //                if (checkBiddingCache()) return;
-                startLoadAd(true);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true);
             }
 
             @Override

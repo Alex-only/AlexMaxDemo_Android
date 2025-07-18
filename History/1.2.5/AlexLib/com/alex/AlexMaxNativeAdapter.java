@@ -13,6 +13,7 @@ import com.anythink.nativead.unitgroup.api.CustomNativeAd;
 import com.anythink.nativead.unitgroup.api.CustomNativeAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
+import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 
@@ -66,7 +67,9 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         AlexMaxInitManager.getInstance().initSDK(context, serverExtra, new MediationInitCallback() {
             @Override
             public void onSuccess() {
-                startLoadAd(context.getApplicationContext(), false, localExtra);
+                AppLovinSdk appLovinSdk = AlexMaxInitManager.getInstance().getApplovinSdk();
+
+                startLoadAd(context.getApplicationContext(), appLovinSdk, false, localExtra);
             }
 
             @Override
@@ -76,8 +79,8 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
         });
     }
 
-    private void startLoadAd(Context context, final boolean isBidding, Map<String, Object> localExtras) {
-        nativeAdLoader = new MaxNativeAdLoader(mAdUnitId);
+    private void startLoadAd(Context context, AppLovinSdk appLovinSdk, final boolean isBidding, Map<String, Object> localExtras) {
+        nativeAdLoader = new MaxNativeAdLoader(mAdUnitId, appLovinSdk, context);
         AlexMaxInitManager.getInstance().handleAutoLoad(mAdUnitId, getAdCustomExt());
         if (isDynamicePrice) {
             nativeAdLoader.setExtraParameter("jC7Fp", String.valueOf(dynamicPrice));
@@ -132,7 +135,7 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             @Override
             public void onSuccess() {
 //                if (checkBiddingCache()) return;
-                startLoadAd(context, true, localExtra);
+                startLoadAd(context, AlexMaxInitManager.getInstance().getApplovinSdk(), true, localExtra);
             }
 
             @Override
