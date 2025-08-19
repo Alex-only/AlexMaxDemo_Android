@@ -2,7 +2,7 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
-> - v1.2.6: The minimum supported MAX SDK version 13.3.0
+> - v1.2.6: The minimum supported MAX SDK version 13.3.0; the maxinum supported TopOn SDK version 6.5.10
 > - v1.2.5: Only supported MAX SDK version 13.2.0
 > - v1.2.3: The maximum supported MAX SDK version 13.1.0
 > - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
