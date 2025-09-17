@@ -1,4 +1,6 @@
-> **温馨提示：**遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+> **温馨提示**：遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+> - **v1.2.7版本更新说明:** 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.12及以上
+>
 > - **v1.2.6版本更新说明:** 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.10及以下
 >
 > - **v1.2.5版本更新说明:** 仅支持Max v13.2.0
@@ -53,7 +55,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.6'
+    api 'io.github.alex-only:max_adapter_tpn:1.2.7'
 }
 ```
 
@@ -92,7 +94,7 @@ dependencies {
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:13.3.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.6"/>
+        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.7"/>
         
     </androidPackages>
 </dependencies>
@@ -292,14 +294,14 @@ MAX的Unit跟TopOn的广告类型对应关系如下：
 ATSDK.setNetworkLogDebug(true);//SDK日志功能，集成测试阶段建议开启，上线前必须关闭
 ```
 
-> 打开后，可在Logcat中过滤此TAG查看相关日志：`anythink|AppLovinSdk`
+> 打开后，可在Logcat中过滤此TAG查看相关日志：`secmtp|AppLovinSdk`
 
 （1）可通过以下日志获取设备ID(GAID)
 
-```java
-anythink: ********************************** UA_6.x.xx *************************************
-anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
-anythink: ********************************** UA_6.x.xx *************************************
+```txt
+secmtp: ********************************** UA_6.x.xx *************************************
+secmtp: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
+secmtp: ********************************** UA_6.x.xx *************************************
 ```
 
 ### 2. 打开Max的测试模式
@@ -315,4 +317,4 @@ anythink: ********************************** UA_6.x.xx *************************
 
 在Max后台添加测试设备后，请等待5~10分钟，待配置生效后，调用TopOn SDK的相关方法进行TopOn广告位的加载&展示，验证Max广告的集成是否正常
 
-````
+---

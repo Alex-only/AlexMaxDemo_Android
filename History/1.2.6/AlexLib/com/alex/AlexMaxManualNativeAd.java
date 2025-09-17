@@ -11,9 +11,9 @@ import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 
-import com.secmtp.sdk.core.api.ATAdConst;
-import com.secmtp.sdk.nativead.api.ATNativePrepareInfo;
-import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAd;
+import com.anythink.core.api.ATAdConst;
+import com.anythink.nativead.api.ATNativePrepareInfo;
+import com.anythink.nativead.unitgroup.api.CustomNativeAd;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdRevenueListener;
 import com.applovin.mediation.MaxError;

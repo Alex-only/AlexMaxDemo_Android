@@ -3,7 +3,7 @@ package com.alex;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAd;
+import com.anythink.nativead.unitgroup.api.CustomNativeAd;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdRevenueListener;
 import com.applovin.mediation.MaxError;

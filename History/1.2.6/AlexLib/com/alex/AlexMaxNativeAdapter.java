@@ -1,19 +1,18 @@
 package com.alex;
 
-import static com.secmtp.sdk.core.api.ATInitMediation.getIntFromMap;
+import static com.anythink.core.api.ATInitMediation.getIntFromMap;
 
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.secmtp.sdk.core.api.ATAdConst;
-import com.secmtp.sdk.core.api.ATBiddingListener;
-import com.secmtp.sdk.core.api.ATBiddingResult;
-import com.secmtp.sdk.core.api.MediationInitCallback;
-import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAd;
-import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAdapter;
+import com.anythink.core.api.ATAdConst;
+import com.anythink.core.api.ATBiddingListener;
+import com.anythink.core.api.ATBiddingResult;
+import com.anythink.core.api.MediationInitCallback;
+import com.anythink.nativead.unitgroup.api.CustomNativeAd;
+import com.anythink.nativead.unitgroup.api.CustomNativeAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 

@@ -1,14 +1,12 @@
 package com.alex;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.MaxReward;
 import com.applovin.mediation.MaxRewardedAdListener;
 import com.applovin.mediation.ads.MaxRewardedAd;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

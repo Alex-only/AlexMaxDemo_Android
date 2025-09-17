@@ -5,11 +5,11 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.secmtp.sdk.core.api.ATAdConst;
-import com.secmtp.sdk.core.api.ATBiddingListener;
-import com.secmtp.sdk.core.api.ATBiddingResult;
-import com.secmtp.sdk.core.api.MediationInitCallback;
-import com.secmtp.sdk.rewardvideo.unitgroup.api.CustomRewardVideoAdapter;
+import com.anythink.core.api.ATAdConst;
+import com.anythink.core.api.ATBiddingListener;
+import com.anythink.core.api.ATBiddingResult;
+import com.anythink.core.api.MediationInitCallback;
+import com.anythink.rewardvideo.unitgroup.api.CustomRewardVideoAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.MaxReward;

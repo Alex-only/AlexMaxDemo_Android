@@ -5,17 +5,18 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.ViewGroup;
 
-import com.anythink.core.api.ATAdConst;
-import com.anythink.core.api.ATBaseAdAdapter;
-import com.anythink.core.api.ATBiddingListener;
-import com.anythink.core.api.ATBiddingResult;
-import com.anythink.core.api.ErrorCode;
-import com.anythink.core.api.MediationInitCallback;
-import com.anythink.splashad.unitgroup.api.CustomSplashAdapter;
+import com.secmtp.sdk.core.api.ATAdConst;
+import com.secmtp.sdk.core.api.ATBaseAdAdapter;
+import com.secmtp.sdk.core.api.ATBiddingListener;
+import com.secmtp.sdk.core.api.ATBiddingResult;
+import com.secmtp.sdk.core.api.ErrorCode;
+import com.secmtp.sdk.core.api.MediationInitCallback;
+import com.secmtp.sdk.splashad.unitgroup.api.CustomSplashAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAppOpenAd;
+import com.applovin.sdk.AppLovinSdk;
 
 import java.util.HashMap;
 import java.util.Map;

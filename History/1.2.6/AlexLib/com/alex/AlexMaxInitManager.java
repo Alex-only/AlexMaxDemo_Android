@@ -9,11 +9,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.secmtp.sdk.core.api.ATAdapterLogUtil;
-import com.secmtp.sdk.core.api.ATInitMediation;
-import com.secmtp.sdk.core.api.ATSDK;
-import com.secmtp.sdk.core.api.ATSDKGlobalSetting;
-import com.secmtp.sdk.core.api.MediationInitCallback;
+import com.anythink.core.api.ATAdapterLogUtil;
+import com.anythink.core.api.ATInitMediation;
+import com.anythink.core.api.ATSDK;
+import com.anythink.core.api.MediationInitCallback;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.sdk.AppLovinMediationProvider;
@@ -54,7 +53,7 @@ public class AlexMaxInitManager extends ATInitMediation {
 
     AtomicBoolean mHasCallbackInit = new AtomicBoolean();
 
-    private final String APPLOVIN_MEDIATION_INIT_MANAGER = "com.secmtp.sdk.mediation.adapters.applovin.ApplovinATInitManager";
+    private final String APPLOVIN_MEDIATION_INIT_MANAGER = "com.anythink.network.applovin.ApplovinATInitManager";
 
     private Object initManagerInstance;
     private Method initSDKMediationAppLovinMethod;
@@ -183,12 +182,8 @@ public class AlexMaxInitManager extends ATInitMediation {
             prepareUserId(settings);
             prepareDynameicUnit(settings, serviceExtras);
             settings.setVerboseLogging(ATSDK.isNetworkLogDebug());
-            if (ATSDKGlobalSetting.isGlobalMute != null) {
-                settings.setMuted(ATSDKGlobalSetting.isGlobalMute);
-            } else {
-                if (mMute != null) {
-                    settings.setMuted(mMute);
-                }
+            if (mMute != null) {
+                settings.setMuted(mMute);
             }
         }
 
@@ -219,8 +214,8 @@ public class AlexMaxInitManager extends ATInitMediation {
         mIsLoading.set(true);
 
         // Create the initialization configuration
-        AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder(sdkKey)
-                .setMediationProvider(AppLovinMediationProvider.MAX)
+        AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder( sdkKey )
+                .setMediationProvider( AppLovinMediationProvider.MAX )
                 // Perform any additional configuration/setting changes
                 .build();
 
@@ -370,11 +365,9 @@ public class AlexMaxInitManager extends ATInitMediation {
     private void callbackResult(String errorMsg) {
         try {
             if (backgroundHandler != null) {
-                backgroundHandler.removeMessages(MSG_CHECK);
+                backgroundHandler.removeCallbacksAndMessages(null);
             }
-            if (mHandlerThread != null) {
-                mHandlerThread.quitSafely();
-            }
+            mHandlerThread.quitSafely();
         } catch (Throwable ignored) {
 
         }
@@ -524,14 +517,11 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
     public void setMute(boolean isMuted) {
-        try {
-            mMute = isMuted;
-            AppLovinSdk applovinSdk = getApplovinSdk();
-            if (applovinSdk != null) {
-                applovinSdk.getSettings().setMuted(isMuted);
-            }
-        } catch (Throwable ignored) {
+        mMute = isMuted;
 
+        AppLovinSdk applovinSdk = getApplovinSdk();
+        if (applovinSdk != null) {
+            applovinSdk.getSettings().setMuted(isMuted);
         }
     }
 

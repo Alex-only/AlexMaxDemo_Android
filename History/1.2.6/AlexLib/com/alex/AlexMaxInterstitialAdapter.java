@@ -5,16 +5,15 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.secmtp.sdk.core.api.ATAdConst;
-import com.secmtp.sdk.core.api.ATBiddingListener;
-import com.secmtp.sdk.core.api.ATBiddingResult;
-import com.secmtp.sdk.core.api.MediationInitCallback;
-import com.secmtp.sdk.interstitial.unitgroup.api.CustomInterstitialAdapter;
+import com.anythink.core.api.ATAdConst;
+import com.anythink.core.api.ATBiddingListener;
+import com.anythink.core.api.ATBiddingResult;
+import com.anythink.core.api.MediationInitCallback;
+import com.anythink.interstitial.unitgroup.api.CustomInterstitialAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxInterstitialAd;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 

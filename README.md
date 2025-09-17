@@ -2,7 +2,8 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
-> - v1.2.6: The minimum supported MAX SDK version 13.3.0; the maximum supported TopOn SDK version 6.5.10
+> - v1.2.7: Support Max v13.3.0 and above, TopOn SDK v6.5.12 and above
+> - v1.2.6: Support Max v13.3.0 and above; the maximum supported TopOn SDK version 6.5.10
 > - v1.2.5: Only supported MAX SDK version 13.2.0
 > - v1.2.3: The maximum supported MAX SDK version 13.1.0
 > - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
@@ -49,7 +50,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter:1.2.6'
+    api 'io.github.alex-only:max_adapter_tpn:1.2.7'
 }
 ```
 
@@ -88,7 +89,7 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
     <androidPackages>
 
         <androidPackage spec="com.applovin:applovin-sdk:13.3.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter:1.2.6"/>
+        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.7"/>
         
     </androidPackages>
 </dependencies>
@@ -285,14 +286,14 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 ATSDK.setNetworkLogDebug(true);//The SDK log function is recommended to be turned on during the integration testing phase and must be turned off before going online.
 ```
 
-> After opening, you can filter this TAG in Logcat to view related logs: `anythink|AppLovinSdk`
+> After opening, you can filter this TAG in Logcat to view related logs: `secmtp|AppLovinSdk`
 
 (1) The device ID (GAID) can be obtained through the following logs
 
 ```java
-anythink: ********************************** UA_6.x.xx *************************************
-anythink: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
-anythink: ********************************** UA_6.x.xx *************************************
+secmtp: ********************************** UA_6.x.xx *************************************
+secmtp: GAID(ADID): ********-****-****-****-************ , AndroidID: ****************
+secmtp: ********************************** UA_6.x.xx *************************************
 ```
 
 ### 2. Open Max's test mode

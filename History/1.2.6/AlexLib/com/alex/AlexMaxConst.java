@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class AlexMaxConst {
 
-    private static final String ADAPTER_VERSION = "1.2.7";
+    private static final String ADAPTER_VERSION = "1.2.6";
     public static final String IS_ADAPTIVE = "is_adaptive";
 
     public static final String KEY_REVENUE = "revenue";
