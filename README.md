@@ -2,13 +2,16 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
+> - v1.2.9: Support Max v13.3.0 and above, TopOn SDK v6.5.50 and above
+>   - **Banner Ads**: Added support for tablet devices (Size: LEADER - 728x90)
+>   - **Adaptive Banners**: Added support for Admob, Google Ad Manager, Liftoff Monetize, Pangle, and Yandex
+>   - For usage instructions, please refer to [Example Code](#step-7-new-feature-example-code).
+> 
 > - v1.2.7: Support Max v13.3.0 and above, TopOn SDK v6.5.12 and above
 > - v1.2.6: Support Max v13.3.0 and above; the maximum supported TopOn SDK version 6.5.10
 > - v1.2.5: Only supported MAX SDK version 13.2.0
 > - v1.2.3: The maximum supported MAX SDK version 13.1.0
 > - v1.2.2: Supports Max v13.0.0. [The Max SDK will not be initialized for child users.](https://developers.applovin.com/en/max/android/overview/privacy/#children)
-> - v1.2.1: Support Max v13.0.0
-> - v1.1.7: Support Max v12.5.0
 
 ---
 
@@ -17,7 +20,7 @@
 
 ## Step 1. Integrate TopOn SDK
 
-Please download the sdk from the topon background, it is recommended to integrate **TopOn v6.4.19 and above**
+Please download the sdk from the [TopOn Dashboard](https://portal.toponad.net/m/sdk/download?type=Android), it is recommended to integrate **TopOn v6.4.19 and above**
 
 ---
 
@@ -31,7 +34,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:13.3.1'
+    api 'com.applovin:applovin-sdk:13.5.0'
 }
 ```
 
@@ -50,7 +53,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter_tpn:1.2.7'
+    api 'io.github.alex-only:max_adapter_tpn:1.2.9'
 }
 ```
 
@@ -88,8 +91,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.3.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.7"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.5.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.9"/>
         
     </androidPackages>
 </dependencies>
@@ -106,9 +109,9 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 
 Take access to Admob as an example:
 
-1.1 Go to TopOn Background first, and check which version of Admob is compatible with the connected TopOn version? (The Admob version compatible with TopOn v6.2.72 is v22.3.0)
+1.1 Go to TopOn dashboard first, and check which version of Admob is compatible with the connected TopOn version? (The Admob version compatible with TopOn v6.2.72 is v22.3.0)
 
-1.2 Then go to [Max Background](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.10.1) and Admob version (v22.3.0), find the corresponding Adapter version (that is, v22.3.0.0)
+1.2 Then go to [Max dashboard](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#adapter-network-information), according to the Max SDK version (v11.10.1) and Admob version (v22.3.0), find the corresponding Adapter version (that is, v22.3.0.0)
 
 **⚠️ Note:**
 
@@ -130,7 +133,7 @@ dependencies {
 
 Enter the [Preparing Mediated Networks](https://dash.applovin.com/documentation/mediation/android/mediation-adapters#gradle) page, then check Admob and perform additional configuration according to the generated configuration instructions.
 
-**Note**: The corresponding application ID of "com.google.android.gms.ads.APPLICATION_ID" configured in AndroidManifest.xml must be consistent with the application ID in the Admob advertising source configured in the TopOn background.
+**Note**: The corresponding application ID of "com.google.android.gms.ads.APPLICATION_ID" configured in AndroidManifest.xml must be consistent with the application ID in the Admob advertising source configured in the TopOn dashboard.
 
 ![img](img/network_config.png)
 
@@ -144,7 +147,7 @@ Enter the [Preparing Mediated Networks](https://dash.applovin.com/documentation/
 
 **Note：**
 
-- Among them, sdkKey is the SDK Key of Max background.
+- Among them, sdkKey is the SDK Key of Max dashboard.
 - After testing, you need to delete this code
 
 ```java
@@ -173,9 +176,9 @@ public class MainActivity extends Activity
 
 ---
 
-## Step 4. TopOn background configuration
+## Step 4. TopOn dashboard configuration
 
-1、After connecting according to the SDK docking document, you need to add a custom advertising platform in the background
+1、After connecting according to the SDK docking document, you need to add a custom advertising platform in the dashboard
 
 ![img](img/image1_en.png)
 
@@ -215,7 +218,7 @@ After the above configurations are completed, you can add ad sources in TopOn.
 "unit_type": Ad slot type, 0: Banner, 1: MREC
 ```
 
-The JSON configuration example when adding an ad source in the background is as follows: (xxx needs to be replaced with the actual SDK key and ad slot ID of Max, and "unit_type" does not need to be configured for non-banner ad slots)
+The JSON configuration example when adding an ad source in the dashboard is as follows: (xxx needs to be replaced with the actual SDK key and ad slot ID of Max, and "unit_type" does not need to be configured for non-banner ad slots)
 
 ```
 {
@@ -277,7 +280,7 @@ The corresponding relationship between MAX’s Unit and TopOn’s placement type
 
 ## Step 6. Test Max ads
 
-<font color='red'>⚠️ Please make sure you have followed the instructions above to create applications and advertising placement in the Max backend and configure them under the advertising placement in the TopOn backend.</font>
+<font color='red'>⚠️ Please make sure you have followed the instructions above to create applications and advertising placement in the Max dashboard and configure them under the advertising placement in the TopOn dashboard.</font>
 
 
 ### 1. Open the log of TopOn SDK
@@ -307,4 +310,40 @@ Enter the [MAX - Test Mode](https://dash.applovin.com/o/mediation/test_modes) pa
 
 ### 3. Load & display ads
 
-After adding the test device to the Max backend, please wait for 5 to 10 minutes. After the configuration takes effect, call the relevant methods of the TopOn SDK to load and display the TopOn placement to verify whether the integration of the Max advertising is normal.
+After adding the test device to the Max dashboard, please wait for 5 to 10 minutes. After the configuration takes effect, call the relevant methods of the TopOn SDK to load and display the TopOn placement to verify whether the integration of the Max advertising is normal.
+
+---
+
+## Step 7. New Feature Example Code
+
+### How to use [Max Adaptive Banners](https://support.axon.ai/en/max/android/ad-formats/banner-and-mrec-ads/#adaptive-banners) in TopOn Android SDK
+
+**Anchored adaptive banners**
+
+```java
+int adaptiveType = AlexMaxConst.ADAPTIVE_ANCHORED;
+int widthPx = context.getResources().getDisplayMetrics().widthPixels;
+
+Map<String, Object> localExtra = new HashMap<>();
+localExtra.put(AlexMaxConst.ADAPTIVE_TYPE, adaptiveType);
+localExtra.put(ATAdConst.KEY.AD_WIDTH, widthPx);
+mBannerView.setLocalExtra(localExtra);
+mBannerView.loadAd();
+```
+
+**Inline adaptive banners**
+
+```java
+int adaptiveType = AlexMaxConst.ADAPTIVE_INLINE;
+int widthPx = ...;
+
+Map<String, Object> localExtra = new HashMap<>();
+localExtra.put(AlexMaxConst.ADAPTIVE_TYPE, adaptiveType);
+localExtra.put(ATAdConst.KEY.AD_WIDTH, widthPx);
+// Specify the maximum height. If not set, it defaults to the screen height.
+//int lineMaxHeightPx = ...;
+//localExtra.put(AlexMaxConst.INLINE_MAXIMUM_HEIGHT, lineMaxHeightPx);
+
+mBannerView.setLocalExtra(localExtra);
+mBannerView.loadAd();
+```

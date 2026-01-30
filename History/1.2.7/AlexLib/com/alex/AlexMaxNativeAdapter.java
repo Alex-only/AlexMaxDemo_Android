@@ -114,13 +114,13 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
             }
         };
 
-//        if (TextUtils.equals(mUnitType, "2")) {
-        AlexMaxManualNativeAd alexMaxNativeAd = new AlexMaxManualNativeAd(context, nativeAdLoader, loadCallbackListener);
-        alexMaxNativeAd.startLoad(localExtras);
-//        } else {
-//            AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, loadCallbackListener, mMediaWidth, mMediaHeight);
-//            alexMaxNativeAd.startLoad();
-//        }
+        if (TextUtils.equals(mUnitType, "2")) {
+            AlexMaxManualNativeAd alexMaxNativeAd = new AlexMaxManualNativeAd(context, nativeAdLoader, loadCallbackListener);
+            alexMaxNativeAd.startLoad(localExtras);
+        } else {
+            AlexMaxNativeAd alexMaxNativeAd = new AlexMaxNativeAd(nativeAdLoader, loadCallbackListener, mMediaWidth, mMediaHeight);
+            alexMaxNativeAd.startLoad();
+        }
 
     }
 
@@ -208,11 +208,6 @@ public class AlexMaxNativeAdapter extends CustomNativeAdapter {
     @Override
     public String getNetworkSDKVersion() {
         return AlexMaxInitManager.getInstance().getNetworkVersion();
-    }
-
-    @Override
-    public int baseOnAdapterBridgeVersion() {
-        return AlexMaxInitManager.getInstance().getAdapterBridgeVersion();
     }
 
     @Override

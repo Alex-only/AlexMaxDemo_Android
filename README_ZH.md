@@ -1,4 +1,10 @@
 > **温馨提示**：遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
+> - **v1.2.9版本更新说明:
+>   1. 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.50及以上
+>   2. **Banner 广告升级**：新增对平板设备的支持（尺寸规格：LEADER - 728x90）
+>   3. **自适应 Banner (Adaptive Banners)**：新增支持，已适配 Admob、Google Ad Manager、Liftoff Monetize、Pangle 及 Yandex 平台
+>   4. 如何使用请参考[示例Code](#七-新功能示例Code)
+> 
 > - **v1.2.7版本更新说明:** 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.12及以上
 >
 > - **v1.2.6版本更新说明:** 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.10及以下
@@ -8,10 +14,6 @@
 > - **v1.2.3版本更新说明:** 仅支持Max v13.1.0及以下
 >
 > - **v1.2.2版本更新说明:** 支持Max v13.0.0, [对于儿童用户，不会初始化Max SDK](https://developers.applovin.com/en/max/android/overview/privacy/#children)
->
-> - **v1.2.1版本更新说明:** 支持Max v13.0.0
->
-> - **v1.1.7版本更新说明:** 支持Max v12.5.0
 
 ---
 
@@ -36,7 +38,7 @@
 ```java
 dependencies {
     //Max SDK
-    api 'com.applovin:applovin-sdk:13.3.1'
+    api 'com.applovin:applovin-sdk:13.5.0'
 }
 ```
 
@@ -55,7 +57,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter_tpn:1.2.7'
+    api 'io.github.alex-only:max_adapter_tpn:1.2.9'
 }
 ```
 
@@ -93,8 +95,8 @@ dependencies {
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.3.1"/>
-        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.7"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.5.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.9"/>
         
     </androidPackages>
 </dependencies>
@@ -283,7 +285,7 @@ MAX的Unit跟TopOn的广告类型对应关系如下：
 
 ---
 
-## 六、测试Max广告
+## 六. 测试Max广告
 
 <font color='red'>⚠️请确保已经按照上方说明，已经在Max后台创建好应用和广告位，并将其配置到TopOn后台的广告位下</font>
 
@@ -316,5 +318,41 @@ secmtp: ********************************** UA_6.x.xx ***************************
 ### 3. 加载&展示广告
 
 在Max后台添加测试设备后，请等待5~10分钟，待配置生效后，调用TopOn SDK的相关方法进行TopOn广告位的加载&展示，验证Max广告的集成是否正常
+
+---
+
+## 七. 新功能示例Code
+
+### TopOn Android SDK 中如何使用[Max Adaptive Banners](https://support.axon.ai/en/max/android/ad-formats/banner-and-mrec-ads/#adaptive-banners)
+
+**Anchored adaptive banners**
+
+```java
+int adaptiveType = AlexMaxConst.ADAPTIVE_ANCHORED;
+int widthPx = context.getResources().getDisplayMetrics().widthPixels;
+
+Map<String, Object> localExtra = new HashMap<>();
+localExtra.put(AlexMaxConst.ADAPTIVE_TYPE, adaptiveType);
+localExtra.put(ATAdConst.KEY.AD_WIDTH, widthPx);
+mBannerView.setLocalExtra(localExtra);
+mBannerView.loadAd();
+```
+
+**Inline adaptive banners**
+
+```java
+int adaptiveType = AlexMaxConst.ADAPTIVE_INLINE;
+int widthPx = ...;
+
+Map<String, Object> localExtra = new HashMap<>();
+localExtra.put(AlexMaxConst.ADAPTIVE_TYPE, adaptiveType);
+localExtra.put(ATAdConst.KEY.AD_WIDTH, widthPx);
+//指定最大高度，不设置时默认最大为屏幕高度
+//int lineMaxHeightPx = ...;
+//localExtra.put(AlexMaxConst.INLINE_MAXIMUM_HEIGHT, lineMaxHeightPx);
+
+mBannerView.setLocalExtra(localExtra);
+mBannerView.loadAd();
+```
 
 ---

@@ -10,17 +10,15 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.secmtp.sdk.banner.unitgroup.api.CustomBannerAdapter;
-import com.secmtp.sdk.core.api.ATAdConst;
 import com.secmtp.sdk.core.api.ATBiddingListener;
 import com.secmtp.sdk.core.api.ATBiddingResult;
-import com.secmtp.sdk.core.api.ATInitMediation;
 import com.secmtp.sdk.core.api.MediationInitCallback;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.mediation.MaxAdViewAdListener;
-import com.applovin.mediation.MaxAdViewConfiguration;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAdView;
+import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkUtils;
 
 import java.util.Map;
@@ -139,114 +137,12 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
 
     }
 
-    private MaxAdViewConfiguration.AdaptiveType mapToMaxAdaptiveType(int adaptiveType) {
-        if (adaptiveType == AlexMaxConst.ADAPTIVE_ANCHORED) {
-            return MaxAdViewConfiguration.AdaptiveType.ANCHORED;
-        } else if (adaptiveType == AlexMaxConst.ADAPTIVE_INLINE) {
-            return MaxAdViewConfiguration.AdaptiveType.INLINE;
-        } else {
-            return MaxAdViewConfiguration.AdaptiveType.NONE;
-        }
-    }
-
-    private int getDefaultHeight(Context context, MaxAdFormat maxAdFormat) {
-        if (maxAdFormat == MaxAdFormat.MREC) {
-            return AppLovinSdkUtils.dpToPx(context, 250);
-        }
-
-        int heightDp;
-        if (maxAdFormat == MaxAdFormat.LEADER) {
-            heightDp = 90;
-        } else {
-            boolean tablet = AppLovinSdkUtils.isTablet(context);
-            heightDp = tablet ? 90 : 50;
-        }
-
-        return AppLovinSdkUtils.dpToPx(context, heightDp);
-    }
-
     private void startLoadAd(Context context, Map<String, Object> localExtra, final boolean isBiddingRequest) {
-
-        MaxAdFormat maxAdFormat;
-        if (TextUtils.equals("2", mUnitType)) { //LEADER, 728x90
-            maxAdFormat = MaxAdFormat.LEADER;
-        } else if (TextUtils.equals("1", mUnitType)) { //MREC
-            maxAdFormat = MaxAdFormat.MREC;
+        if (TextUtils.equals("1", mUnitType)) { //MREC
+            mMaxAdView = new MaxAdView(mAdUnitId, MaxAdFormat.MREC);
         } else { //Banner
-            maxAdFormat = MaxAdFormat.BANNER;
+            mMaxAdView = new MaxAdView(mAdUnitId);
         }
-
-        int adaptiveType = localExtra.containsKey(AlexMaxConst.ADAPTIVE_TYPE) ? ATInitMediation.getIntFromMap(localExtra, AlexMaxConst.ADAPTIVE_TYPE, AlexMaxConst.ADAPTIVE_ANCHORED) : -1;
-        int localWidthPx = ATInitMediation.getIntFromMap(localExtra, ATAdConst.KEY.AD_WIDTH, 0);
-        if (localWidthPx <= 0) {
-            localWidthPx = ATInitMediation.getIntFromMap(localExtra, AlexMaxConst.ADAPTIVE_WIDTH, 0);
-        }
-        int localWidthDp = AppLovinSdkUtils.pxToDp(context, localWidthPx);
-        int inlineMaximumHeightPx = ATInitMediation.getIntFromMap(localExtra, AlexMaxConst.INLINE_MAXIMUM_HEIGHT, 0);
-        int inlineMaximumHeightDp = AppLovinSdkUtils.pxToDp(context, inlineMaximumHeightPx);
-        boolean isAdaptive = ATInitMediation.getBooleanFromMap(localExtra, AlexMaxConst.IS_ADAPTIVE, false);
-
-        if (isAdaptive) {
-            if (adaptiveType == -1) {
-                adaptiveType = AlexMaxConst.ADAPTIVE_ANCHORED;
-            }
-        } else {
-            if (adaptiveType == AlexMaxConst.ADAPTIVE_ANCHORED || adaptiveType == AlexMaxConst.ADAPTIVE_INLINE) {
-                isAdaptive = true;
-            }
-        }
-
-        // adaptive
-        MaxAdViewConfiguration.Builder maxAdViewConfigBuilder = MaxAdViewConfiguration.builder();
-        maxAdViewConfigBuilder.setAdaptiveType(mapToMaxAdaptiveType(adaptiveType));
-        if (isAdaptive && localWidthDp > 0) {
-            maxAdViewConfigBuilder.setAdaptiveWidth(localWidthDp);
-        }
-        if (inlineMaximumHeightDp > 0) {
-            maxAdViewConfigBuilder.setInlineMaximumHeight(inlineMaximumHeightDp);
-        }
-
-
-        int defaultWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-        int defaultHeight = getDefaultHeight(context, maxAdFormat);
-        int width = 0;
-        int height = 0;
-
-
-        if (adaptiveType == AlexMaxConst.ADAPTIVE_INLINE) {
-            width = localWidthPx > 0 ? localWidthPx : defaultWidth;
-            height = inlineMaximumHeightPx > 0 ? inlineMaximumHeightPx : ViewGroup.LayoutParams.MATCH_PARENT;
-
-        } else if (adaptiveType == AlexMaxConst.ADAPTIVE_ANCHORED) {
-
-            if (TextUtils.equals("1", mUnitType)) { //MREC
-                width = AppLovinSdkUtils.dpToPx(context, 300);
-                height = AppLovinSdkUtils.dpToPx(context, 250);
-            } else { //Banner or LEADER
-                width = localWidthPx > 0 ? localWidthPx : defaultWidth;
-                int adaptiveHeight = MaxAdFormat.BANNER.getAdaptiveSize(localWidthDp > 0 ? localWidthDp : -1, context).getHeight();
-                height = AppLovinSdkUtils.dpToPx(context, adaptiveHeight);
-            }
-
-        } else {
-            if (TextUtils.equals("1", mUnitType)) { //MREC
-                width = AppLovinSdkUtils.dpToPx(context, 300);
-                height = AppLovinSdkUtils.dpToPx(context, 250);
-            } else { //Banner or LEADER
-                width = localWidthPx;
-                height = defaultHeight;
-            }
-        }
-
-        if (width == 0) {
-            width = defaultWidth;
-        }
-
-        if (height == 0) {
-            height = defaultHeight;
-        }
-
-        mMaxAdView = new MaxAdView(mAdUnitId, maxAdFormat, maxAdViewConfigBuilder.build());
 
         mMaxAdView.setExtraParameter("allow_pause_auto_refresh_immediately", "true");
 
@@ -259,6 +155,39 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
         }
 
         registerListener(isBiddingRequest);
+
+        int defaultWidth = ViewGroup.LayoutParams.MATCH_PARENT;
+        boolean tablet = AppLovinSdkUtils.isTablet(context);
+        int defaultHeight = AppLovinSdkUtils.dpToPx(context, tablet ? 90 : 50);
+        int width = 0;
+        int height = 0;
+
+
+        if (TextUtils.equals("1", mUnitType)) { //MREC
+            width = AppLovinSdkUtils.dpToPx(context, 300);
+            height = AppLovinSdkUtils.dpToPx(context, 250);
+        } else { //Banner
+            if (localExtra.containsKey(AlexMaxConst.IS_ADAPTIVE)) {
+
+                try {
+                    if ((Boolean) localExtra.get(AlexMaxConst.IS_ADAPTIVE)) {
+                        width = defaultWidth;
+
+                        int adaptiveHeight = MaxAdFormat.BANNER.getAdaptiveSize(((Activity) context)).getHeight();
+                        height = AppLovinSdkUtils.dpToPx(context, adaptiveHeight);
+                    }
+                } catch (Throwable e) {
+                }
+            }
+        }
+
+        if (width == 0) {
+            width = defaultWidth;
+        }
+
+        if (height == 0) {
+            height = defaultHeight;
+        }
 
         mMaxAdView.setLayoutParams(new FrameLayout.LayoutParams(width, height));
 
@@ -380,11 +309,6 @@ public class AlexMaxBannerAdapter extends CustomBannerAdapter {
     @Override
     public String getNetworkSDKVersion() {
         return AlexMaxInitManager.getInstance().getNetworkVersion();
-    }
-
-    @Override
-    public int baseOnAdapterBridgeVersion() {
-        return AlexMaxInitManager.getInstance().getAdapterBridgeVersion();
     }
 
     @Override

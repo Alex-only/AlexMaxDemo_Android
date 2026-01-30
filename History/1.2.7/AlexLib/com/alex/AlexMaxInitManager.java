@@ -14,7 +14,6 @@ import com.secmtp.sdk.core.api.ATInitMediation;
 import com.secmtp.sdk.core.api.ATSDK;
 import com.secmtp.sdk.core.api.ATSDKGlobalSetting;
 import com.secmtp.sdk.core.api.MediationInitCallback;
-import com.secmtp.sdk.core.api.bridge.ATAdapterBridgeConst;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdFormat;
 import com.applovin.sdk.AppLovinMediationProvider;
@@ -108,11 +107,6 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
     private List<MediationInitCallback> mListeners;
-
-    @Override
-    public int getAdapterBridgeVersion() {
-        return ATAdapterBridgeConst.ADAPTER_BRIDGE_VERSIONCODE;
-    }
 
     public synchronized void initSDK(Context context, Map<String, Object> serviceExtras, final MediationInitCallback initListener) {
         String sdkKey = (String) serviceExtras.get("sdk_key");

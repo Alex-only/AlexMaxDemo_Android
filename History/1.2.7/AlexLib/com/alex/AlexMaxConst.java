@@ -6,15 +6,8 @@ import java.util.Map;
 
 public class AlexMaxConst {
 
-    private static final String ADAPTER_VERSION = "1.2.9";
+    private static final String ADAPTER_VERSION = "1.2.7";
     public static final String IS_ADAPTIVE = "is_adaptive";
-    public static final String ADAPTIVE_TYPE = "adaptive_type";
-    public static final String ADAPTIVE_WIDTH = "adaptive_width";
-    public static final String INLINE_MAXIMUM_HEIGHT = "inline_maximum_height";
-    public static final int ADAPTIVE_ANCHORED = 0;
-    public static final int ADAPTIVE_INLINE = 1;
-
-
 
     public static final String KEY_REVENUE = "revenue";
     public static final String KEY_AD_UNIT_ID = "ad_unit_id";

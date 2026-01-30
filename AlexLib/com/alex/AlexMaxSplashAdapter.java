@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 
 import com.secmtp.sdk.core.api.ATAdConst;
-import com.secmtp.sdk.core.api.ATBaseAdAdapter;
+import com.secmtp.sdk.core.api.bridge.ATBaseAdAdapter;
 import com.secmtp.sdk.core.api.ATBiddingListener;
 import com.secmtp.sdk.core.api.ATBiddingResult;
 import com.secmtp.sdk.core.api.ErrorCode;
@@ -16,7 +16,6 @@ import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.MaxAdListener;
 import com.applovin.mediation.MaxError;
 import com.applovin.mediation.ads.MaxAppOpenAd;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -248,6 +247,11 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     }
 
     @Override
+    public int baseOnAdapterBridgeVersion() {
+        return AlexMaxInitManager.getInstance().getAdapterBridgeVersion();
+    }
+
+    @Override
     public String getNetworkName() {
         return AlexMaxInitManager.getInstance().getNetworkName();
     }
@@ -266,6 +270,7 @@ public class AlexMaxSplashAdapter extends CustomSplashAdapter {
     public Map<Integer, Class<? extends ATBaseAdAdapter>> getFormatAdapterMap() {
         Map<Integer, Class<? extends ATBaseAdAdapter>> formatAdapterMap = new HashMap<>();
         formatAdapterMap.put(NATIVE_FORMAT, AlexMaxNativeAdapter.class);
+        formatAdapterMap.put(INTERSTITIAL_FORMAT, AlexMaxInterstitialAdapter.class);
         return formatAdapterMap;
     }
 }

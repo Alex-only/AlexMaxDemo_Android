@@ -324,11 +324,6 @@ public class AlexMaxRewardedVideoAdapter extends CustomRewardVideoAdapter {
     }
 
     @Override
-    public int baseOnAdapterBridgeVersion() {
-        return AlexMaxInitManager.getInstance().getAdapterBridgeVersion();
-    }
-
-    @Override
     public String getNetworkName() {
         return AlexMaxInitManager.getInstance().getNetworkName();
     }
