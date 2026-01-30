@@ -1,5 +1,5 @@
 > **温馨提示**：遵守COPPA规定的开发者，请确保使用v1.2.2及以上版本的Adapter
-> - **v1.2.9版本更新说明:
+> - **v1.2.9版本更新说明**:
 >   1. 仅支持Max v13.3.0及以上; 仅支持TopOn v6.5.50及以上
 >   2. **Banner 广告升级**：新增对平板设备的支持（尺寸规格：LEADER - 728x90）
 >   3. **自适应 Banner (Adaptive Banners)**：新增支持，已适配 Admob、Google Ad Manager、Liftoff Monetize、Pangle 及 Yandex 平台
@@ -354,5 +354,6 @@ localExtra.put(ATAdConst.KEY.AD_WIDTH, widthPx);
 mBannerView.setLocalExtra(localExtra);
 mBannerView.loadAd();
 ```
+
 
 ---
