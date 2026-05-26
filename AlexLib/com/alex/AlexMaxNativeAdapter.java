@@ -1,6 +1,6 @@
 package com.alex;
 
-import static com.secmtp.sdk.core.api.ATInitMediation.getIntFromMap;
+import static com.anythink.core.api.ATInitMediation.getIntFromMap;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -13,7 +13,6 @@ import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAd;
 import com.secmtp.sdk.nativead.unitgroup.api.CustomNativeAdapter;
 import com.applovin.mediation.MaxAd;
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader;
-import com.applovin.sdk.AppLovinSdk;
 
 import java.util.Map;
 

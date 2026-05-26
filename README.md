@@ -2,6 +2,8 @@
 > - ⚠️ Developers who comply with COPPA regulations, please ensure you are using v1.2.2 and above of the Adapter.
 
 > Changelog
+> - v1.3.0: Support Max v13.3.0 and above, TopOn SDK v6.5.50 and above
+> - 
 > - v1.2.9: Support Max v13.3.0 and above, TopOn SDK v6.5.50 and above
 >   - **Banner Ads**: Added support for tablet devices (Size: LEADER - 728x90)
 >   - **Adaptive Banners**: Added support for Admob, Google Ad Manager, Liftoff Monetize, Pangle, and Yandex
@@ -34,7 +36,7 @@ Add the following code in build.gradle to import the platform SDK
 
 ```java
 dependencies {
-    api 'com.applovin:applovin-sdk:13.5.0'
+    api 'com.applovin:applovin-sdk:13.6.0'
 }
 ```
 
@@ -53,7 +55,7 @@ repositories {
 
 dependencies {
     //Alex Adapter
-    api 'io.github.alex-only:max_adapter_tpn:1.2.9'
+    api 'io.github.alex-only:max_adapter_tpn:1.3.0'
 }
 ```
 
@@ -91,8 +93,8 @@ Add a file in the Assets/AnyThinkAds/Plugins/Android/NonChina/mediation director
 <dependencies>
     <androidPackages>
 
-        <androidPackage spec="com.applovin:applovin-sdk:13.5.0"/>
-        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.2.9"/>
+        <androidPackage spec="com.applovin:applovin-sdk:13.6.0"/>
+        <androidPackage spec="io.github.alex-only:max_adapter_tpn:1.3.0"/>
         
     </androidPackages>
 </dependencies>

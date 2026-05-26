@@ -44,14 +44,15 @@ public class AlexMaxInitManager extends ATInitMediation {
     private volatile static AlexMaxInitManager sInstance;
 
     private String mSdkKey;
-    private AppLovinSdk mAppLovinSdk;
+    private volatile AppLovinSdk mAppLovinSdk;
     private Object mLock = new Object();
+    private final Object mCacheLock = new Object();
     private Boolean mMute = null;
 
     private AtomicBoolean mIsLoading = new AtomicBoolean(false);
 
 
-    Map<String, Map<String, AlexMaxBiddingInfo>> mAdCacheMap;
+    volatile Map<String, Map<String, AlexMaxBiddingInfo>> mAdCacheMap;
 
     AtomicBoolean mHasCallbackInit = new AtomicBoolean();
 
@@ -103,7 +104,7 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
 
-    public synchronized void initSDK(Context context, Map<String, Object> serviceExtras) {
+    public void initSDK(Context context, Map<String, Object> serviceExtras) {
         this.initSDK(context, serviceExtras, null);
     }
 
@@ -114,7 +115,7 @@ public class AlexMaxInitManager extends ATInitMediation {
         return ATAdapterBridgeConst.ADAPTER_BRIDGE_VERSIONCODE;
     }
 
-    public synchronized void initSDK(Context context, Map<String, Object> serviceExtras, final MediationInitCallback initListener) {
+    public void initSDK(Context context, Map<String, Object> serviceExtras, final MediationInitCallback initListener) {
         String sdkKey = (String) serviceExtras.get("sdk_key");
 
         if (initSDKMediationAppLovinMethod != null) {
@@ -214,15 +215,12 @@ public class AlexMaxInitManager extends ATInitMediation {
             if (initListener != null) {
                 mListeners.add(initListener);
             }
-
         }
 
-
-        if (mIsLoading.get()) {
+        // 只有第一个走到这里的线程负责真正初始化 AppLovin
+        if (!mIsLoading.compareAndSet(false, true)) {
             return;
         }
-
-        mIsLoading.set(true);
 
         // Create the initialization configuration
         AppLovinSdkInitializationConfiguration initConfig = AppLovinSdkInitializationConfiguration.builder(sdkKey)
@@ -447,38 +445,39 @@ public class AlexMaxInitManager extends ATInitMediation {
         return "com.applovin.sdk.AppLovinSdk";
     }
 
-    protected synchronized String saveC2SOffer(String adUnitId, Object adCacheObject, MaxAd maxAd) {
-        if (mAdCacheMap == null) {
-            mAdCacheMap = new ConcurrentHashMap<>(3);
-        }
-        Map<String, AlexMaxBiddingInfo> unitCacheMap = mAdCacheMap.get(adUnitId);
-        if (unitCacheMap == null) {
-            unitCacheMap = new ConcurrentHashMap<>(2);
-            mAdCacheMap.put(adUnitId, unitCacheMap);
-        }
-        unitCacheMap.clear();
-
+    protected String saveC2SOffer(String adUnitId, Object adCacheObject, MaxAd maxAd) {
         String cacheId = UUID.randomUUID().toString();
         AlexMaxBiddingInfo biddingInfo = new AlexMaxBiddingInfo(adCacheObject, maxAd);
-        unitCacheMap.put(cacheId, biddingInfo);
-
+        synchronized (mCacheLock) {
+            if (mAdCacheMap == null) {
+                mAdCacheMap = new ConcurrentHashMap<>(3);
+            }
+            Map<String, AlexMaxBiddingInfo> unitCacheMap = mAdCacheMap.get(adUnitId);
+            if (unitCacheMap == null) {
+                unitCacheMap = new ConcurrentHashMap<>(2);
+                mAdCacheMap.put(adUnitId, unitCacheMap);
+            }
+            unitCacheMap.clear();
+            unitCacheMap.put(cacheId, biddingInfo);
+        }
         return cacheId;
     }
 
-    protected synchronized AlexMaxBiddingInfo requestC2SOffer(String adUnitId, String cacheId) {
-        if (mAdCacheMap != null) {
-            Map<String, AlexMaxBiddingInfo> unitCacheMap = mAdCacheMap.get(adUnitId);
+    protected AlexMaxBiddingInfo requestC2SOffer(String adUnitId, String cacheId) {
+        Map<String, Map<String, AlexMaxBiddingInfo>> cacheMap = mAdCacheMap;
+        if (cacheMap != null) {
+            Map<String, AlexMaxBiddingInfo> unitCacheMap = cacheMap.get(adUnitId);
             if (unitCacheMap != null) {
-                AlexMaxBiddingInfo alexMaxBiddingInfo = unitCacheMap.remove(cacheId);
-                return alexMaxBiddingInfo;
+                return unitCacheMap.remove(cacheId);
             }
         }
         return null;
     }
 
-    protected synchronized Map.Entry<String, AlexMaxBiddingInfo> checkC2SCacheOffer(String adUnitId) {
-        if (mAdCacheMap != null) {
-            Map<String, AlexMaxBiddingInfo> unitCacheMap = mAdCacheMap.get(adUnitId);
+    protected Map.Entry<String, AlexMaxBiddingInfo> checkC2SCacheOffer(String adUnitId) {
+        Map<String, Map<String, AlexMaxBiddingInfo>> cacheMap = mAdCacheMap;
+        if (cacheMap != null) {
+            Map<String, AlexMaxBiddingInfo> unitCacheMap = cacheMap.get(adUnitId);
             if (unitCacheMap != null) {
                 Iterator<Map.Entry<String, AlexMaxBiddingInfo>> iterator = unitCacheMap.entrySet().iterator();
                 while (iterator.hasNext()) {
@@ -580,7 +579,7 @@ public class AlexMaxInitManager extends ATInitMediation {
     }
 
 
-    public synchronized void handleAutoLoad(String adUnitId, String customExt) {
+    public void handleAutoLoad(String adUnitId, String customExt) {
         if (TextUtils.isEmpty(adUnitId)) {
             return;
         }
@@ -592,20 +591,21 @@ public class AlexMaxInitManager extends ATInitMediation {
             return;
         }
 
-        if (TextUtils.isEmpty(customExt)) {
-            printLog(TAG, "disableAutoLoad: " + adUnitId + ", customExt is empty, open auto load");
-            handleDisableAdUnitIds(adUnitId, settings, 1);
-            return;
-        }
+        synchronized (mLock) {
+            if (TextUtils.isEmpty(customExt)) {
+                printLog(TAG, "disableAutoLoad: " + adUnitId + ", customExt is empty, open auto load");
+                handleDisableAdUnitIds(adUnitId, settings, 1);
+                return;
+            }
 
+            try {
+                JSONObject jsonObject = new JSONObject(customExt);
+                int autoLoadSw = jsonObject.optInt("auto_load_sw", 1);//1: on, 2:off
 
-        try {
-            JSONObject jsonObject = new JSONObject(customExt);
-            int autoLoadSw = jsonObject.optInt("auto_load_sw", 1);//1: on, 2:off
-
-            handleDisableAdUnitIds(adUnitId, settings, autoLoadSw);
-        } catch (Throwable e) {
-            e.printStackTrace();
+                handleDisableAdUnitIds(adUnitId, settings, autoLoadSw);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     }
 
